@@ -4161,6 +4161,7 @@ database:sadd(bot_id..'Ban:User'..msg.chat_id_, result.id_)
 usertext = '\n👤¦ العضو » ['..result.title_..'](t.me/'..(username or 'BOBBW')..')'
 status  = '\n📫¦ تم حظره من المجموعه'
 texts = usertext..status
+send(msg.chat_id_, msg.id_, texts)
 chat_kick(msg.chat_id_, result.id_)
 end,nil)   
 end
@@ -6667,7 +6668,7 @@ return false end
 end
 if text and text:match("^(.*)$") then
 if database:get(bot_id..'Set:Manager:rd'..msg.sender_user_id_..':'..msg.chat_id_..'') == 'true2' then
-send(msg.chat_id_, msg.id_,'📌¦ تم ازالة الرد من قائمه ردود المطور')
+send(msg.chat_id_, msg.id_,'📌¦ تم ازالة الرد من قائمه ردود المدير')
 database:del(bot_id.."Add:Rd:Manager:Gif"..text..msg.chat_id_)   
 database:del(bot_id.."Add:Rd:Manager:Vico"..text..msg.chat_id_)   
 database:del(bot_id.."Add:Rd:Manager:Stekrs"..text..msg.chat_id_)     
