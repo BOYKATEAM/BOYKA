@@ -7928,9 +7928,6 @@ local tahaa = {
 "فـدشـي عمـي💋💘",
 "دغـيرهـا شبـي هـاذ😒💔",
 "بـبكن حـلك 💞😻",
-"أول مـره شـوف صـخل حـلو😷😂",
-"جـنك الـعـافـيه💘",
-"وفالله شنهاي😕😹",
 }
 local rdphoto = tahaa[math.random(#tahaa)]
 if not database:get(bot_id..'Bot:Id:Photo'..msg.chat_id_) then      
@@ -8387,7 +8384,7 @@ database:incrby(bot_id..'SADD:NUM'..msg.chat_id_..msg.sender_user_id_,1)
 if tonumber(database:get(bot_id..'SADD:NUM'..msg.chat_id_..msg.sender_user_id_)) >= 3 then
 database:del(bot_id..'SADD:NUM'..msg.chat_id_..msg.sender_user_id_)
 database:del(bot_id.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_)   
-send(msg.chat_id_, msg.id_,'📮| اوبس لقد خسرت في اللعبه \n💠| حظآ اوفر في المره القادمه \n🔰| كان الرقم الذي تم تخمينه { '..GETNUM..' }')
+send(msg.chat_id_, msg.id_,'📮| اوبس لقد خسرت في اللعبه \n??| حظآ اوفر في المره القادمه \n🔰| كان الرقم الذي تم تخمينه { '..GETNUM..' }')
 else
 send(msg.chat_id_, msg.id_,'⚠️| اوبس تخمينك غلط \n📌| ارسل رقم تخمنه مره اخرى ')
 end
