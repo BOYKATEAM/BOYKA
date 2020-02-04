@@ -62,13 +62,6 @@ cd $HOME/BOYKA
 token="]]..database:get(id_server..":token")..[["
 while(true) do
 rm -fr ../.telegram-cli
-function print_logo() {
-echo -e "\e[34m   ______     _______                                                ______  <<<\e[0m"
-echo -e "\e[34m  | ____ ) | /______| \  \ \           / /  | |      / /       / /         \ \ \e[0m"
-echo -e "\e[34m  |  ___ \ | | |            | |  \ \     / /       | |__/ /       / /_______\ \\e[0m"
-echo -e "\e[34m  | |___)/ | | | _____ | |       | |             | |   \ \      / / ________ \ \\e[0m"
-echo -e "\e[34m  |______/ \_______/        | |             | |     \  \ / /                     \ \\e[0m"
-}
 if [ ! -f ./tg ]; then
 echo "┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉┉ ┉ ┉ ┉ ┉ ┉ ┉"
 echo "TG IS NOT FIND IN FILES BOT"
