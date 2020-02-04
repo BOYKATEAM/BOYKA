@@ -9,6 +9,9 @@ print([[
 | )___) )| (___) |   | |   |  /  \ \| )   ( |
 |/ \___/ (_______)   \_/   |_/    \/|/     \|
 
+~~> CH › @BOBBW
+~~> CH › @BBEBW
+~~> DEVELOPER › @JJEJJ
 ]])
 redis = require('redis') 
 https = require ("ssl.https") 
@@ -33,14 +36,14 @@ file:write(serialized)
 file:close()  
 end  
 if not database:get(id_server..":token") then
-io.write('\27[1;35m\n ارسل لي توكن البوت الان ↓ :\n\27[0;33;49m')
+io.write('\27[1;35m\n ~~{توكن البوت }~~\n\27[0;33;49m')
 local token = io.read()
 if token ~= '' then
 local url , res = https.request('https://api.telegram.org/bot'..token..'/getMe')
 if res ~= 200 then
 print('\27[1;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n التوكن غير صحيح تاكد منه ثم ارسله')
 else
-io.write('\27[1;36m تم حفظ التوكن بنجاح \n27[0;39;49m')
+io.write('\27[1;36m ~~{تم حفظ التوكن}~~ \n27[0;39;49m')
 database:set(id_server..":token",token)
 end 
 else
@@ -49,10 +52,10 @@ end
 os.execute('lua BOYKA.lua')
 end
 if not database:get(id_server..":SUDO:ID") then
-io.write('\27[1;35m\n ارسل لي ايدي المطور الاساسي ↓ :\n\27[0;33;49m')
+io.write('\27[1;35m\n ~~{ ايدي المطور }~~ \n\27[0;33;49m')
 local SUDOID = io.read()
 if SUDOID ~= '' then
-io.write('\27[1;36m تم حفظ ايدي المطور الاساسي \n27[0;39;49m')
+io.write('\27[1;36m ~~{تم حفظ ايدي}~~ \n27[0;39;49m')
 database:set(id_server..":SUDO:ID",SUDOID)
 else
 print('\27[1;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يتم حفظ ايدي المطور الاساسي ارسله مره اخره')
