@@ -8617,6 +8617,54 @@ end
 tdcli_function ({ID = "GetMessage",chat_id_=msg.chat_id_,message_id_=tonumber(msg.reply_to_message_id_)},reply, nil)
 return false
 end
+if text == 'نقود' or text == 'نقودي' then 
+if AddChannel(msg.sender_user_id_) == false then
+local textchuser = database:get(bot_id..'text:ch:user')
+if textchuser then
+send(msg.chat_id_, msg.id_,'['..textchuser..']')
+else
+send(msg.chat_id_, msg.id_,'🔖| لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n 📌| اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
+end
+return false
+end
+local Num = database:get(bot_id..'NUM:GAMES'..msg.chat_id_..msg.sender_user_id_) or 0
+if Num == 0 then 
+Text = '📌| لم تلعب اي لعبه للحصول على نقود'
+else
+Text = '📮| عدد نقود التي ربحتها هي *» { '..Num..' } نقوده *'
+end
+send(msg.chat_id_, msg.id_,Text) 
+end
+if text and text:match("^بيع نقودي (%d+)$") or text and text:match("^بيع نقود (%d+)$") then
+local NUMPY = text:match("^بيع نقودي (%d+)$") or text:match("^بيع نقود (%d+)$") 
+if AddChannel(msg.sender_user_id_) == false then
+local textchuser = database:get(bot_id..'text:ch:user')
+if textchuser then
+send(msg.chat_id_, msg.id_,'['..textchuser..']')
+else
+send(msg.chat_id_, msg.id_,'👥¦ لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n ??¦ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
+end
+return false
+end
+if tonumber(NUMPY) == tonumber(0) then
+send(msg.chat_id_,msg.id_,"\n*📮| لا استطيع البيع اقل من 1 *") 
+return false 
+end
+if tonumber(database:get(bot_id..'NUM:GAMES'..msg.chat_id_..msg.sender_user_id_)) == tonumber(0) then
+send(msg.chat_id_,msg.id_,'📮| ليس لديك نقود في الالعاب\n🎗️| اذا كنت تريد ربح نقود \n📌| ارسل الالعاب وابدأ اللعب ! ') 
+else
+local NUM_GAMES = database:get(bot_id..'NUM:GAMES'..msg.chat_id_..msg.sender_user_id_)
+if tonumber(NUMPY) > tonumber(NUM_GAMES) then
+send(msg.chat_id_,msg.id_,'\n📮| ليس لديك نقود بهاذ العبه \n🔘| لزيادة نقودك في اللعبه \n📌| ارسل الالعاب وابدأ اللعب !') 
+return false 
+end
+local NUMNKO = (NUMPY * 50)
+database:decrby(bot_id..'NUM:GAMES'..msg.chat_id_..msg.sender_user_id_,NUMPY)  
+database:incrby(bot_id..'Msg_User'..msg.chat_id_..':'..msg.sender_user_id_,NUMNKO)  
+send(msg.chat_id_,msg.id_,'🚸| تم خصم *» { '..NUMPY..' }* من نقودك \n💌| وتم اضافة* » { '..(NUMPY * 50)..' } رساله الى رسالك *')
+end 
+return false 
+end
 if text == 'فحص البوت' and Manager(msg) then
 local Chek_Info = https.request('https://api.telegram.org/bot'..token..'/getChatMember?chat_id='.. msg.chat_id_ ..'&user_id='.. bot_id..'')
 local Json_Info = JSON.decode(Chek_Info)
