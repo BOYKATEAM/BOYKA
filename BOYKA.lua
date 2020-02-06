@@ -5082,7 +5082,7 @@ return false
 end
 database:sadd(bot_id..'Ban:User'..msg.chat_id_, result.id_)
 usertext = '\n👤| المستخدم » ['..result.title_..'](t.me/'..(username or 'GLOBLA')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره من المجموعه'
+status  = '\n🔘| تم حظره من المجموعه'
 texts = usertext..status
 chat_kick(msg.chat_id_, result.id_)
 send(msg.chat_id_, msg.id_, texts)
@@ -5132,11 +5132,11 @@ chat_kick(msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
 if data.first_name_ then
 usertext = '\n👤| العضو » ['..data.first_name_..'](t.me/'..(data.username_ or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره من المجموعه'
+status  = '\n🔘| تم حظره من المجموعه'
 send(msg.chat_id_, msg.id_, usertext..status)
 else
 usertext = '\n👤| العضو » '..userid..''
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره من المجموعه'
+status  = '\n🔘| تم حظره من المجموعه'
 send(msg.chat_id_, msg.id_, usertext..status)
 end;end,nil)
 end,nil)   
@@ -5190,7 +5190,7 @@ end
 database:srem(bot_id..'Ban:User'..msg.chat_id_, result.id_)
 tdcli_function ({ ID = "ChangeChatMemberStatus", chat_id_ = msg.chat_id_, user_id_ = result.id_, status_ = { ID = "ChatMemberStatusLeft" },},function(arg,ban) end,nil)   
 usertext = '\n👤| العضو » ['..result.title_..'](t.me/'..(username or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم الغاء حظره من هنا'
+status  = '\n🔘| تم الغاء حظره من هنا'
 texts = usertext..status
 else
 texts = '⚠| لا يوجد حساب بهاذا المعرف'
@@ -5221,11 +5221,11 @@ tdcli_function ({ ID = "ChangeChatMemberStatus", chat_id_ = msg.chat_id_, user_i
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
 if data.first_name_ then
 usertext = '\n👤| العضو » ['..data.first_name_..'](t.me/'..(data.username_ or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم الغاء حظره من هنا'
+status  = '\n🔘| تم الغاء حظره من هنا'
 send(msg.chat_id_, msg.id_, usertext..status)
 else
 usertext = '\n👤|لعضو » '..userid..''
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم الغاء حظره من هنا'
+status  = '\n🔘| تم الغاء حظره من هنا'
 send(msg.chat_id_, msg.id_, usertext..status)
 end;end,nil)
 return false
@@ -5277,7 +5277,7 @@ end
 database:sadd(bot_id..'Muted:User'..msg.chat_id_, result.sender_user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
 usertext = '\n👤|العضو » ['..data.first_name_..'](t.me/'..(data.username_ or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم كتمه من هنا'
+status  = '\n??| الايدي » `'..result.sender_user_id_..'`\n🔘| تم كتمه من هنا'
 send(msg.chat_id_, msg.id_, usertext..status)
 end,nil)
 end
