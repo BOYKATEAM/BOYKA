@@ -2940,7 +2940,7 @@ send(msg.chat_id_, msg.id_, "⚠️| لا يمكنك حظر المطور الا�
 return false 
 end
 usertext = '\n👤|العضو » ['..result.title_..'](t.me/'..(username or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره عام من المجموعات'
+status  = '\n🔘| تم حظره عام من المجموعات'
 texts = usertext..status
 database:sadd(bot_id..'GBan:User', result.id_)
 else
@@ -2974,11 +2974,11 @@ database:sadd(bot_id..'GBan:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
 if data.first_name_ then
 usertext = '\n👤| العضو » ['..data.first_name_..'](t.me/'..(data.username_ or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره عام من المجموعات'
+status  = '\n🔘| تم حظره عام من المجموعات'
 send(msg.chat_id_, msg.id_, usertext..status)
 else
 usertext = '\n👤| العضو » '..userid..''
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره عام من المجموعات'
+status  = '\n🔘| تم حظره عام من المجموعات'
 send(msg.chat_id_, msg.id_, usertext..status)
 end;end,nil)
 return false
@@ -3018,7 +3018,7 @@ end
 function start_function(extra, result, success)
 if result.id_ then
 usertext = '\n👤|العضو » ['..result.title_..'](t.me/'..(username or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم الغاء حظره عام من المجموعات'
+status  = '\n🔘| تم الغاء حظره عام من المجموعات'
 texts = usertext..status
 database:srem(bot_id..'GBan:User', result.id_)
 else
@@ -3044,11 +3044,11 @@ database:srem(bot_id..'GBan:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
 if data.first_name_ then
 usertext = '\n👤| العضو » ['..data.first_name_..'](t.me/'..(data.username_ or 'BOBBW')..')'
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره عام من المجموعات'
+status  = '\n🔘| تم حظره عام من المجموعات'
 send(msg.chat_id_, msg.id_, usertext..status)
 else
 usertext = '\n👤| العضو » '..userid..''
-status  = '\n📮| الايدي » `'..result.sender_user_id_..'`\n🔘| تم حظره عام من المجموعات'
+status  = '\n🔘| تم حظره عام من المجموعات'
 send(msg.chat_id_, msg.id_, usertext..status)
 end;end,nil)
 return false
@@ -3143,7 +3143,7 @@ local file = name_t[2]..'.lua'
 local file_bot = io.open("File_Bot/"..file,"r")
 if file_bot then
 io.close(file_bot)
-t = "*🔖| بالتاكيد تم تفعيل ملف → "..file.." \n"
+t = "🔖| بالتاكيد تم تفعيل ملف → "..file.." \n"
 else
 t = "📁| الملف ← "..file.."\n🔰| تم تفعيل ملف \n"
 end
@@ -6697,6 +6697,7 @@ database:del(bot_id.."Add:Filter:Rp2"..text..msg.chat_id_)
 database:srem(bot_id.."List:Filter"..msg.chat_id_,text)  
 return false  end  
 end
+
 end
 if text == 'منع' and tonumber(msg.reply_to_message_id_) > 0 and Manager(msg) then     
 function cb(a,b,c) 
