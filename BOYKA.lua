@@ -706,7 +706,7 @@ local start = database:get(bot_id.."Start:Bot")
 if start then 
 SourceBOYKAr = start
 else
-SourceBOYKAr = '🔖| اهلا عزيزي\n📮| انا بوت حماية المجموعات\n⚡| اختصاصي حمايه المجموعات\n✨| من تكرار والسبام والتوجيه والخ.؟\n🚸| لتفعيلي اتبع الاخطوات…↓\n⚠️| اضفني الي مجموعتك وقم بترقيتي ادمن واكتب كلمه { تفعيل }  ويستطيع »{ منشئ او المشرفين } بتفعيل فقط'
+SourceBOYKAr = '🔖| اهلا عزيزي\n📮| انا بوت {'..Namebot..'}حماية المجموعات\n⚡| اختصاصي حمايه المجموعات\n✨| من تكرار والسبام والتوجيه والخ.؟\n🚸| لتفعيلي اتبع الاخطوات…↓\n⚠️| اضفني الي مجموعتك وقم بترقيتي ادمن واكتب كلمه { تفعيل }  ويستطيع »{ منشئ او المشرفين } بتفعيل فقط'
 end 
 send(msg.chat_id_, msg.id_, SourceBOYKAr) 
 end
@@ -857,7 +857,7 @@ send(msg.chat_id_, msg.id_,'📮| اهلا عزيزى مطور اساسي \n🔰
 end
 if text == 'تحديث السورس ™' and SudoBot(msg) then 
 os.execute('rm -rf BOYKA.lua')
-os.execute('wget https://raw.githubusercontent.com/BOYKABOT/BOYKA/master/BOYKA.lua')
+os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
 send(msg.chat_id_, msg.id_,'🔘 | تم تحديث سورس')
 dofile('BOYKA.lua')  
 end
@@ -2035,7 +2035,7 @@ end
 return false
 end
 os.execute('rm -rf BOYKA.lua')
-os.execute('wget https://raw.githubusercontent.com/BOYKABOT/BOYKA/master/BOYKA.lua')
+os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
 send(msg.chat_id_, msg.id_,'📌| تم تحديث السورس')
 dofile('BOYKA.lua')  
 end
@@ -3089,7 +3089,7 @@ send(msg.chat_id_, msg.id_,t)
 end
 if text == "متجر الملفات" or text == 'المتجر' then
 if SudoBot(msg) then
-local Get_Files, res = https.request("https://raw.githubusercontent.com/BOYKABOT/Files_Boyka/master/getfile.json")
+local Get_Files, res = https.request("https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/getfile.json")
 if res == 200 then
 local Get_info, res = pcall(JSON.decode,Get_Files);
 vardump(res.plugins_)
@@ -3127,7 +3127,7 @@ t = "📁| الملف ← "..file.."\n🔰| تم تعطيل ملف \n"
 else
 t = "🔖| بالتاكيد تم تعطيل ملف → "..file.."\n"
 end
-local json_file, res = https.request("https://raw.githubusercontent.com/BOYKABOT/Files_Boyka/master/File_Bot/"..file)
+local json_file, res = https.request("https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/"..file)
 if res == 200 then
 os.execute("rm -fr File_Bot/"..file)
 send(msg.chat_id_, msg.id_,t) 
@@ -3147,7 +3147,7 @@ t = "🔖| بالتاكيد تم تفعيل ملف → "..file.." \n"
 else
 t = "📁| الملف ← "..file.."\n🔰| تم تفعيل ملف \n"
 end
-local json_file, res = https.request("https://raw.githubusercontent.com/BOYKABOT/Files_Boyka/master/File_Bot/"..file)
+local json_file, res = https.request("https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/"..file)
 if res == 200 then
 local chek = io.open("File_Bot/"..file,'w+')
 chek:write(json_file)
