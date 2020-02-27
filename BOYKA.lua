@@ -7001,7 +7001,7 @@ Group_Kick(msg.chat_id_, data.id_)
 end
 end,nil)
 end
-send(msg.chat_id_, msg.id_,'🛰️| تم طرد جميع الحسابات المحذوفه')
+send(msg.chat_id_, msg.id_,'📮| تم طرده المحذوفين')
 end,nil)
 end
 end
