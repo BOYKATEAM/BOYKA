@@ -7356,16 +7356,6 @@ send(msg.chat_id_, msg.id_,"💠| ارسل لي الاسم الان ")
 end
 return false
 end
-if text:match("^كول (.*)$") then
-local txt = {string.match(text, "^(كول) (.*)$")}
-send(msg.chat_id_, 0, txt[2], "md")
-local id = msg.id_
-local msgs = {
-[0] = id
-}
-local chat = msg.chat_id_
-delete_msg(chat, msgs)
-end
 
 if text == ""..(database:get(bot_id..'Name:Bot') or 'بويكا').."" then  
 Namebot = (database:get(bot_id..'Name:Bot') or 'بويكا')
@@ -7950,11 +7940,11 @@ database:sadd(bot_id..'Spam:Texting'..msg.sender_user_id_,text)
 end  
 end
 end
-
-if text == ""..(database:get(bot_id..'Name:Bot') or 'بويكا').." غادر" then  
-if Sudo(msg) and not database:get(bot_id..'Left:Bot'..msg.chat_id_) then 
+-------------------------------
+if text == ""..(database:get(bot_id..'Name:Bot') or 'بويكا').." غادر" or text == 'غادر' then  
+if Sudo(msg) and not database:get(bot_id..'Left:Bot'..msg.chat_id_)  then 
 tdcli_function ({ID = "ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=bot_id,status_={ID = "ChatMemberStatusLeft"},},function(e,g) end, nil) 
-send(msg.chat_id_, msg.id_,'📫| تم مغادرة المجموعه') 
+send(msg.chat_id_, msg.id_,'🔰| تم مغادرة المجموعه') 
 database:srem(bot_id..'Chek:Groups',msg.chat_id_)  
 end
 return false  
@@ -8717,6 +8707,16 @@ promote = 'ꪜ' else promote = '✘' end
 send(msg.chat_id_,msg.id_,'\n📌| اهلا عزيزي البوت هنا ادمن'..'\n🎗️|  وصلاحياته هي ↓ \nٴ━━━━━━━━━━'..'\n📝|  تغير معلومات المجموعه ↞ ❴ '..info..' ❵'..'\n💌|  حذف الرسائل ↞ ❴ '..delete..' ❵'..'\n💠|  حظر المستخدمين ↞ ❴ '..restrict..' ❵'..'\n♻|  دعوة مستخدمين ↞ ❴ '..invite..' ❵'..'\n🔘|  تثبيت الرسائل ↞ ❴ '..pin..' ❵'..'\n🔰|  اضافة مشرفين جدد ↞ ❴ '..promote..' ❵')   
 end
 end
+end
+if text:match("^كول (.*)$") then
+local txt = {string.match(text, "^(كول) (.*)$")}
+send(msg.chat_id_, 0, txt[2], "md")
+local id = msg.id_
+local msgs = {
+[0] = id
+}
+local chat = msg.chat_id_
+delete_msg(chat, msgs)
 end
 
 if text and text:match("^تغير رد المطور (.*)$") and Manager(msg) then
