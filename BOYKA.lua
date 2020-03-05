@@ -702,6 +702,7 @@ local keyboard = {
 {'تنظيف الكروبات 🗑️','تنظيف المشتركين 🗑️'},
 {'جلب نسخه البوت 📡'},
 {'تحديث السورس ™','الاصدار 📟'},
+{'معلومات السيرفر 📊'},
 {'الغاء ✖'}
 }
 send_inline_key(msg.chat_id_,bl,keyboard)
@@ -860,6 +861,17 @@ if text == 'معلومات الكيبورت 💬' and SudoBot(msg) then
 database:del(bot_id..'Sart:Bot') 
 send(msg.chat_id_, msg.id_,'📮| اهلا عزيزى مطور اساسي \n🔰| معلومات كتالي↓\n1• الاحصائيات { لعرض عدد الكروبات، والمشتركين في البوت }\n2• تفعيل التواصل { لتفعيل التواصل عبر البوت خاص بك}\n3• تعطيل التواصل { لتعطيل التواصل عبر البوت خاص بك }\n4• قائمه العام { لعرض المحظورين عام في البوت }\n5• المطورين { لعرض المطورين في بوتك } \n6• ضع اسم للبوت { لختيار اسم لبوت خاص بك }\n7• حذف كليشه ستارت { حذف كليشه عندما يضغط العضو علي كلمه /start }\n8• ضع كليشه ستارت { لختيار كلايشه /start حديده }\n9• اذاعه { ارسال رساله لجميع الكروبات في بوتك }\n10• اذاعه خاص { ارسال رساله لجميع مشتركين بوتك!}\n11• تعطيل الاشتراك الاجباري { لتعطيل الاشتراك جباري خاص بوتك}\n12• تفعيل الاشتراك الاجباري { لتفعيل الاشتراك الاجباري بوتك }\n13•اذاعه بالتوجيه { ارسال رساله بالتوجيه الي جميع الكروبات }\n14• اذاعه بالتوجيه خاص { ارسال رساله بالتوجيه الي جميع المشتركين }\n15• حذف رساله الاشتراك { لحذف رساله الاشتراك التي اضفتها }\n16• تغير رساله الاشتراك { لتغير رساله الاشتراك خاصه بوتك وتختار غيرها }\n17• تغير الاشتراك {لتغير الاشتراك الاجباري خاص بوتك واضافت قناة غيرها }\n18• تفعيل الاشتراك الاول { لتفعيل الاشتراك جباري عندما تفعيل البوت اول مَـرّھٌ }\n19• الاشتراك الاجباري { لظهار القناة مفعل الاشتراك عليها }\n20• تفعيل البوت الخدمي { يمكن هاذا امر ان منشئ الكروب يفعل البوت م̷ـــِْن دون حتياجه لمطور البوت\n21• تعطيل البوت الخدمي { يمك هل خاصيه ان تفعيل البوت اله مطورين البوت فقط }\n22• تنظيف المشتركين { يمكنك ازاله المشتركين الوهمين عبر هل امر }\n23• تنظيف الكروبات { يمكن ازاله المجموعات الوهميه عبر عل امر }\n24• جلب نسخه احتياطيه { لعرض ملف المجموعات بوتك }\n25• تحديث السورس { لتحديث السورس خاص بوتك }\n26• الغاء { للغاء الامر الذي طلبته }\n===ء====================\n🔰| اوامر كيبورت المطور اساسي معا شرح\n📮| قناة السورس [ضغط هنا](t.me/BOBBW) \n💬| مطور السورس [اضغط هنا](t.me/BOBBW)') 
 end
+if text == 'معلومات السيرفر 📊' and SudoBot(msg) then 
+ local text2 = 'Info Server : \n'
+  local BOYKA1 = database:info()
+  text2 = text2..'1 - *Uptime Days* : `'..BOYKA1.server.uptime_in_days..'('..BOYKA1.server.uptime_in_seconds..' seconds)`\n'
+  text2 = text2..'2 - *Commands Processed* : `'..BOYKA1.stats.total_commands_processed..'`\n'
+  text2 = text2..'3 - *Expired Keys* : `'..BOYKA1.stats.expired_keys..'`\n'
+  text2 = text2..'4 - *Ops/sec* : `'..BOYKA1.stats.instantaneous_ops_per_sec..'`\n'
+send(msg.chat_id_, msg.id_, text2)  
+end
+
+
 if text == 'تحديث السورس ™' and SudoBot(msg) then 
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
@@ -1726,6 +1738,20 @@ database:sadd(bot_id..'Muted:User'..msg.chat_id_,msg.sender_user_id_)
 DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
 end
 end
+if tonumber(msg.via_bot_user_id_) ~= 0 and not Special(msg) then
+if database:get(bot_id.."lock:inline"..msg.chat_id_) == "del" then
+DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
+elseif database:get(bot_id.."lock:inline"..msg.chat_id_) == "ked" then
+ked(msg.chat_id_,msg.sender_user_id_)
+DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
+elseif database:get(bot_id.."lock:inline"..msg.chat_id_) == "kick" then
+chat_kick(msg.chat_id_,msg.sender_user_id_)
+DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
+elseif database:get(bot_id.."lock:inline"..msg.chat_id_) == "ktm" then
+database:sadd(bot_id..'Muted:User'..msg.chat_id_,msg.sender_user_id_)
+DeleteMessage(msg.chat_id_,{[0] = msg.id_}) 
+end
+end
 --------------------------------------------------------------------------------------------------------------
 if msg.forward_info_ and not Special(msg) then     
 if database:get(bot_id.."lock:forward"..msg.chat_id_) == "del" then
@@ -2309,6 +2335,11 @@ database:set(bot_id..'lock:Fars'..msg.chat_id_,true)
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
 send(msg.chat_id_, msg.id_,'👤| بواسطه ← ['..utf8.sub(data.first_name_,0,60)..'](T.ME/'..(data.username_ or 'BOBBW')..') \n🔘| تـم قفـل النكليزيه ')  
 end,nil)
+elseif text == 'قفل الانلاين' and msg.reply_to_message_id_ == 0 and Manager(msg) then 
+database:set(bot_id.."lock:inline"..msg.chat_id_,'del')  
+tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
+send(msg.chat_id_, msg.id_,'👤| بواسطه ← ['..utf8.sub(data.first_name_,0,60)..'](T.ME/'..(data.username_ or 'BOBBW')..') \n🔘| تـم قفـل الانلاين ')  
+end,nil)
 elseif text == 'قفل تعديل الميديا' and msg.reply_to_message_id_ == 0 and Constructor(msg) then 
 database:set(bot_id..'lock:edit'..msg.chat_id_,true) 
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
@@ -2324,7 +2355,12 @@ tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,dat
 send(msg.chat_id_, msg.id_,'👤| بواسطه ← ['..utf8.sub(data.first_name_,0,60)..'](T.ME/'..(data.username_ or 'BOBBW')..') \n🔘| تـم قفـل جميع الاوامر ')  
 end,nil)   
 end
-if text == 'فتح الاضافه' and msg.reply_to_message_id_ == 0 and Mod(msg) then 
+if text == 'فتح الانلاين' and msg.reply_to_message_id_ == 0 and Mod(msg) then 
+database:del(bot_id.."lock:inline"..msg.chat_id_)  
+tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
+send(msg.chat_id_, msg.id_,'👤| بواسطه ← ['..utf8.sub(data.first_name_,0,60)..'](T.ME/'..(data.username_ or 'BOBBW')..') \n🔘| تـم فتح الانلاين ')  
+end,nil)
+elseif text == 'فتح الاضافه' and msg.reply_to_message_id_ == 0 and Mod(msg) then 
 database:del(bot_id.."lock:AddMempar"..msg.chat_id_)  
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
 send(msg.chat_id_, msg.id_,'👤| بواسطه ← ['..utf8.sub(data.first_name_,0,60)..'](T.ME/'..(data.username_ or 'BOBBW')..') \n🔘| تـم فتح اضافة الاعضاء ')  
@@ -6639,7 +6675,7 @@ if Mod(msg) then
 database:del(bot_id..'Get:Welcome:Group'..msg.chat_id_) 
 send(msg.chat_id_, msg.id_,'💠| تم ازالة ترحيب المجموعه') 
 end
-
+end
 if text == "مسح قائمه المنع" and Mod(msg) then   
 local list = database:smembers(bot_id.."List:Filter"..msg.chat_id_)  
 for k,v in pairs(list) do  
@@ -6689,7 +6725,7 @@ if text then
 local test = database:get(bot_id.."Add:Filter:Rp1"..msg.sender_user_id_..msg.chat_id_)  
 if test == 'repp' then  
 send(msg.chat_id_, msg.id_,'🔖| تم منع الكلمه مع التحذير')  
-database:del(bot_id.."Add:Filter:Rp1"..msg.sender_user_id_..msg.chat_id_)  
+database:set(bot_id.."Add:Filter:Rp1"..msg.sender_user_id_..msg.chat_id_)  
 local test = database:get(bot_id.."filtr1:add:reply2"..msg.sender_user_id_..msg.chat_id_)  
 if text then   
 database:set(bot_id.."Add:Filter:Rp2"..test..msg.chat_id_, text)  
@@ -6720,7 +6756,7 @@ database:del(bot_id.."Add:Filter:Rp2"..text..msg.chat_id_)
 database:srem(bot_id.."List:Filter"..msg.chat_id_,text)  
 return false  end  
 end
-end
+
 if text == 'منع' and tonumber(msg.reply_to_message_id_) > 0 and Manager(msg) then     
 function cb(a,b,c) 
 textt = '📮| تم منع '
@@ -8832,6 +8868,22 @@ database:set(bot_id..'help8_text',text)
 return false
 end
 end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help9'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮| تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help9'..msg.sender_user_id_)
+database:set(bot_id..'help9_text',text)
+return false
+end
+end
+if text and text:match("^(.*)$") then
+if database:get(bot_id..'help10'..msg.sender_user_id_) == 'true' then
+send(msg.chat_id_, msg.id_, '📮| تم حفظ الكليشه بنجاح')
+database:del(bot_id..'help10'..msg.sender_user_id_)
+database:set(bot_id..'help10_text',text)
+return false
+end
+end
 
 if text == 'استعاده الاوامر' and SudoBot(msg) then
 database:del(bot_id..'help_text')
@@ -8843,6 +8895,8 @@ database:del(bot_id..'help5_text')
 database:del(bot_id..'help6_text')
 database:del(bot_id..'help7_text')
 database:del(bot_id..'help8_text')
+database:del(bot_id..'help9_text')
+database:del(bot_id..'help10_text')
 send(msg.chat_id_, msg.id_, '🔘| تم استعادة الاوامر القديمه')
 end
 if text == 'تغير امر الاوامر' and SudoBot(msg) then
@@ -8895,6 +8949,18 @@ end
 if text == 'تغير امر م8' and SudoBot(msg) then
 send(msg.chat_id_, msg.id_, '🔘| الان يمكنك ارسال الكليشه م8')
 database:set(bot_id..'help8'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م9' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '🔘| الان يمكنك ارسال الكليشه م9')
+database:set(bot_id..'help9'..msg.sender_user_id_,'true')
+return false 
+end
+
+if text == 'تغير امر م10' and SudoBot(msg) then
+send(msg.chat_id_, msg.id_, '🔘| الان يمكنك ارسال الكليشه م10')
+database:set(bot_id..'help10'..msg.sender_user_id_,'true')
 return false 
 end
 
@@ -8985,6 +9051,7 @@ Text = [[
 🔘| قفل ← فتح الفارسيه
 🔘| قفل ← فتح الفشار
 🔘| قفل ← فتح النكليزيه
+🔘| قفل ← فتح الانلاين
  ء┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉┉
 🔖| CH » @BOBBW
 ]]
@@ -9163,7 +9230,7 @@ Text = [[
 🚸| تغير رد المميز + اسم
 🚸| تغير رد العضو + اسم
 🚸| تغير امر الاوامر
-🚸| تغير امر م1 › الحد م8
+🚸| تغير امر م1 › الحد م10
  ٴ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉
 🔖| CH »  @BOBBW
 ]]
