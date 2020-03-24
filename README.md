@@ -1,6 +1,3 @@
-# 
-
-th3bs.com &amp; blcon.org &amp; .org
 
 # BOYKA
 
