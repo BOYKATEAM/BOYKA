@@ -151,6 +151,7 @@ print([[
 > CH › @BOBBW
 > CH › @BBEBW
 ~> DEVELOPER › @JJEJJ
+~> DEVELOPER › @MMMM_27
 ]])
 sudos = dofile("./Info.lua") 
 SUDO = tonumber(sudos.SUDO)
@@ -3741,7 +3742,7 @@ send(msg.chat_id_, msg.id_,"⚠️| حساب المنشئ محذوف")
 return false  
 end
 local UserName = (b.username_ or "TSHAKETEAM")
-send(msg.chat_id_, msg.id_,"??️‍🗨️| منشئ المجموعه ← ["..b.first_name_.."](T.me/"..UserName..")")  
+send(msg.chat_id_, msg.id_,"👁️‍🗨️| منشئ المجموعه ← ["..b.first_name_.."](T.me/"..UserName..")")  
 end,nil)   
 end
 end
@@ -6443,7 +6444,7 @@ lock_ste = 'بالتقيد 🔏'
 elseif database:get(bot_id.."lock:Sticker"..msg.chat_id_) == "ktm" then 
 lock_ste = 'بالكتم 🔇'    
 elseif database:get(bot_id.."lock:Sticker"..msg.chat_id_) == "kick" then 
-lock_ste = 'بالطرد ??'    
+lock_ste = 'بالطرد 🚷'    
 else
 lock_ste = '✘'    
 end
