@@ -3740,8 +3740,8 @@ if b.first_name_ == false then
 send(msg.chat_id_, msg.id_,"⚠️| حساب المنشئ محذوف")
 return false  
 end
-local UserName = (b.username_ or "BOBBW")
-send(msg.chat_id_, msg.id_,"👁️‍🗨️| منشئ المجموعه ← ["..b.first_name_.."](T.me/"..UserName..")")  
+local UserName = (b.username_ or "TSHAKETEAM")
+send(msg.chat_id_, msg.id_,"??️‍🗨️| منشئ المجموعه ← ["..b.first_name_.."](T.me/"..UserName..")")  
 end,nil)   
 end
 end
@@ -6443,7 +6443,7 @@ lock_ste = 'بالتقيد 🔏'
 elseif database:get(bot_id.."lock:Sticker"..msg.chat_id_) == "ktm" then 
 lock_ste = 'بالكتم 🔇'    
 elseif database:get(bot_id.."lock:Sticker"..msg.chat_id_) == "kick" then 
-lock_ste = 'بالطرد 🚷'    
+lock_ste = 'بالطرد ??'    
 else
 lock_ste = '✘'    
 end
@@ -8376,8 +8376,8 @@ end
 send(msg.chat_id_, msg.id_,first_name..'\n'..last_name) 
 end,nil)
 end 
-if text == 'موقعي' then
-send(msg.chat_id_, msg.id_,'📮| ايديك » '..msg.sender_user_id_)\nاسمك ← {`'..(result.first_name_)..'`}' \n📮| عدد جهاتك *» { '..Num..' } *' \n🚸| عدد سحكاتك *» { '..Num..' } *'
+if text == 'ايديي' then
+send(msg.chat_id_, msg.id_,'📮| ايديك » '..msg.sender_user_id_)
 end
 if text == 'كشف' and tonumber(msg.reply_to_message_id_) > 0 then
 function start_function(extra, result, success)
