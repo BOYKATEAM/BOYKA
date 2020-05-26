@@ -149,8 +149,8 @@ print([[
 |/ \___/ (_______)   \_/   |_/    \/|/     \|
 
 > CH › @BOBBW
-> CH › @BBEBW
-~> DEVELOPER › @JJEJJ
+> CH › @pvv_v
+~> DEVELOPER › @KKKKK4
 ]])
 sudos = dofile("./Info.lua") 
 SUDO = tonumber(sudos.SUDO)
@@ -176,7 +176,7 @@ print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
-sudo_users = {SUDO,554921096}
+sudo_users = {SUDO,1264922434}
 function SudoBot(msg)  
 local BOYKA = false  
 for k,v in pairs(sudo_users) do  
@@ -235,7 +235,7 @@ return false
 end 
 end
 function Can_or_NotCan(user_id,chat_id)
-if tonumber(user_id) == tonumber(554921096) then  
+if tonumber(user_id) == tonumber(1264922434) then  
 var = true  
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
@@ -258,8 +258,8 @@ return var
 end 
 
 function Rutba(user_id,chat_id)
-if tonumber(user_id) == tonumber(554921096) then  
-var = 'مطور السورس👨‍🔧'
+if tonumber(user_id) == tonumber(1264922434) then  
+var = 'مطور السورس??‍🔧'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي👨‍💻'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
@@ -2225,13 +2225,13 @@ Text = [[
  ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉
 📮↬[Channel BOYKA](t.me/BOBBW) 
 
-🔰↬[Information](t.me/BBEBW)
+🔰↬[Information](t.me/pvv_v)
 
-👮‍♂️↬[DEVELOPER](t.me/sajad14p)
+👮‍♂️↬[DEVELOPER](t.me/CCFRR)
 
-🔖↬[The way his inauguration](https://t.me/BOBBW/15)
+🔖↬[The way his inauguration](https://t.me/BOBBW/365)
 
-📌↬[To talk to us](t.me/rrrrybot)
+📌↬[To talk to us](t.me/rriebot)
 ]]
 send(msg.chat_id_, msg.id_,Text)
 return false
