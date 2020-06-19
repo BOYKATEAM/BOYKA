@@ -3540,7 +3540,7 @@ end
 ------------------------------------------------------------------------
 if text == ("مسح الاساسين") and Sudo(msg) then
 database:del(bot_id..'Basic:Constructor'..msg.chat_id_)
-send(msg.chat_id_, msg.id_, '\n☑| تم مسح قائمه المنشئين الاساسين')
+send(msg.chat_id_, msg.id_, '\n⌯︙تم مسح المنشئين الاساسين')
 return false
 end
 
@@ -3556,7 +3556,7 @@ t = t..""..k.."- (`"..v.."`)\n"
 end
 end
 if #list == 0 then
-t = "⌯︙لا يوجد منشئين اساسيين"
+t = "⌯︙لا يوجد منشئين اساسين"
 end
 send(msg.chat_id_, msg.id_, t)
 return false
@@ -3613,7 +3613,7 @@ end
 function start_function(extra, result, success)
 if result.id_ then
 if (result and result.type_ and result.type_.ID == "ChannelChatInfo") then
-send(msg.chat_id_,msg.id_,"⚠| عذرا عزيزي المستخدم هاذا معرف قناة يرجى استخدام الامر بصوره صحيحه !")   
+send(msg.chat_id_,msg.id_,"⌯︙عذرا عزيزي المستخدم هاذا معرف قناة يرجى استخدام الامر بصوره صحيحه !")   
 return false 
 end      
 database:sadd(bot_id..'Basic:Constructor'..msg.chat_id_, result.id_)
@@ -6832,7 +6832,7 @@ if not status_Link then
 send(msg.chat_id_, msg.id_,"⌯︙الرابط معطل") 
 return false  
 end
-local link = database:get(bot_id.."Private:Group:Link"..msg.chat_id_)            
+local link = database:get(bot_id.."Link"..msg.chat_id_)            
 if link then                              
 send(msg.chat_id_,msg.id_,'𝒍𝒊𝒏𝒌 𝒈𝒓𝒐𝒖𝒑  𖠐\n… … … … … … … … … … …\n ['..link..']')                          
 else                
@@ -7111,15 +7111,15 @@ database:setex(bot_id.."CHENG:ID"..msg.chat_id_..""..msg.sender_user_id_,240,tru
 local Text= [[
 ⌯︙ارسل الان النص
 ⌯︙يمكنك اضافه :
- ⌯︙`#rdphoto` > تعليق الصوره
- ⌯︙`#username` > اسم المستخدم
- ⌯︙`#`msgs` > عدد رسائل المستخدم
- ⌯︙`#photos` > عدد صور المستخدم
- ⌯︙`#id` > ايدي المستخدم
- ⌯︙`#auto` > تفاعل المستخدم
- ⌯︙`#stast` > موقع المستخدم 
- ⌯︙`#edit` > عدد السحكات
- ⌯︙`#game` > النقاط
+⌯︙`#rdphoto` ~⪼ تعليق الصوره
+⌯︙`#username` ~⪼ اسم المستخدم
+⌯︙`#msgs` ~⪼ عدد رسائل المستخدم
+⌯︙`#photos` ~⪼ عدد صور المستخدم
+⌯︙`#id` ~⪼ ايدي المستخدم
+⌯︙`#auto` ~⪼ تفاعل المستخدم
+⌯︙`#stast` ~⪼ موقع المستخدم 
+⌯︙`#edit` ~⪼ عدد السحكات
+⌯︙`#game` ~⪼ النقاط
 ]]
 send(msg.chat_id_, msg.id_,Text)
 return false  
@@ -8419,6 +8419,15 @@ tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumbe
 end
 if text and text:match("^ايدي @(.*)$") then
 local username = text:match("^ايدي @(.*)$")
+if AddChannel(msg.sender_user_id_) == false then
+local textchuser = database:get(bot_id..'text:ch:user')
+if textchuser then
+send(msg.chat_id_, msg.id_,'['..textchuser..']')
+else
+send(msg.chat_id_, msg.id_,'⌯︙لا تستطيع استخدام البوت \n ⌯︙يرجى الاشتراك بالقناه اولا \n ⌯︙اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
+end
+return false
+end
 function start_function(extra, result, success)
 if result.id_ then
 tdcli_function ({ID = "GetUser",user_id_ = result.id_},function(extra,data) 
@@ -8614,7 +8623,7 @@ Text = '⌯︙بالتاكيد تم تفعيل امر صيح'
 end
 send(msg.chat_id_, msg.id_,Text) 
 end
-if text == 'تنزيل جميع الرتب' or text == 'تنزيل الرتبه' and BasicConstructor(msg) then
+if text == 'تنزيل جميع الرتب' and BasicConstructor(msg) then  
 database:del(bot_id..'Constructor'..msg.chat_id_)
 database:del(bot_id..'Manager'..msg.chat_id_)
 database:del(bot_id..'Mod:User'..msg.chat_id_)
@@ -8662,7 +8671,16 @@ send(msg.chat_id_, msg.id_,'لا تمتلك صوره في حسابك', 1, 'md')
   end end
 tdcli_function ({ ID = "GetUserProfilePhotos", user_id_ = msg.sender_user_id_, offset_ = 0, limit_ = 1 }, getpro, nil)
 end
-if text == ("ايدي") and msg.reply_to_message_id_ == 0 and not database:get(bot_id..'Bot:Id'..msg.chat_id_) then      
+if text == ("ايدي") and msg.reply_to_message_id_ == 0 and not database:get(bot_id..'Bot:Id'..msg.chat_id_) then     
+if AddChannel(msg.sender_user_id_) == false then
+local textchuser = database:get(bot_id..'text:ch:user')
+if textchuser then
+send(msg.chat_id_, msg.id_,'['..textchuser..']')
+else
+send(msg.chat_id_, msg.id_,'⌯︙لا تستطيع استخدام البوت \n ⌯︙يرجى الاشتراك بالقناه اولا \n ⌯︙اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
+end
+return false
+end
 if not database:sismember(bot_id..'Spam:Texting'..msg.sender_user_id_,text) then
 database:sadd(bot_id..'Spam:Texting'..msg.sender_user_id_,text) 
 tdcli_function ({ID = "GetChatMember",chat_id_ = msg.chat_id_,user_id_ = msg.sender_user_id_},function(arg,da)  tdcli_function ({ ID = "SendChatAction",  chat_id_ = msg.sender_user_id_, action_ = {  ID = "SendMessageTypingAction", progress_ = 100}  },function(arg,ta)  tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)  tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.sender_user_id_,offset_ = 0,limit_ = 1},function(extra,amer,success) 
@@ -8784,7 +8802,16 @@ if text == "مسح جهاتي" or text == "حذف جهاتي" then
 send(msg.chat_id_, msg.id_,'⌯︙تم مسح جهاتك'  )  
 database:del(bot_id..'Add:Contact'..msg.chat_id_..':'..msg.sender_user_id_)
 end
-if text == 'جهاتي' or text == 'شكد ضفت' then 
+if text == 'جهاتي' or text == 'شكد ضفت' then
+if AddChannel(msg.sender_user_id_) == false then
+local textchuser = database:get(bot_id..'text:ch:user')
+if textchuser then
+send(msg.chat_id_, msg.id_,'['..textchuser..']')
+else
+send(msg.chat_id_, msg.id_,'⌯︙لا تستطيع استخدام البوت \n ⌯︙يرجى الاشتراك بالقناه اولا \n ⌯︙اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
+end
+return false
+end
 local Num = tonumber(database:get(bot_id..'Add:Contact'..msg.chat_id_..':'..msg.sender_user_id_) or 0) 
 if Num == 0 then 
 Text = '⌯︙لم تقم بأضافه احد'
@@ -9308,7 +9335,7 @@ end
 end
 if text == "مصه" or text == "بوسه" then
 if not database:get(bot_id..'lock:add'..msg.chat_id_) then
-local texting = {"مووووووووواححح💋😘","مابوس ولي😌😹","خدك/ج نضيف 😂","البوسه بالف حمبي 🌝💋","خلي يزحفلي وابوسه 🙊😻","كل شويه ابوسه كافي 😏","ماابوسه والله هذا زاحف🦎","محح هاي لحاته صاكه💋"}
+local texting = {"مووووووووواححح💋??","مابوس ولي😌😹","خدك/ج نضيف 😂","البوسه بالف حمبي 🌝💋","خلي يزحفلي وابوسه 🙊😻","كل شويه ابوسه كافي 😏","ماابوسه والله هذا زاحف🦎","محح هاي لحاته صاكه💋"}
 send(msg.chat_id_, msg.id_, ''..texting[math.random(#texting)]..'')
 end
 end
@@ -9338,23 +9365,6 @@ end -- Chat_Type = 'GroupBot'
 end -- end msg
 --------------------------------------------------------------------------------------------------------------
 function tdcli_update_callback(data)  -- clback
-if data.ID == "UpdateChannel" then 
-if data.channel_.status_.ID == "ChatMemberStatusKicked" then 
-database:srem(bot_id..'Chek:Groups','-100'..data.channel_.id_)  
-tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,chat)  
-local NameChat = chat.title_
-local IdChat = msg.chat_id_
-Text = '⌯︙تم طرد البوت من المجموعه\n'..
-'\n⌯︙اسم المجموعه {['..NameChat..']}'..
-'\n⌯︙ايدي المجموعه {`'..IdChat..'`}'..
-'\n'
-sendText(SUDO,Text,0,'md')
-
-
-end,nil) 
-end
-end
-
 if data.ID == "UpdateNewMessage" then  -- new msg
 msg = data.message_
 text = msg.content_.text_
