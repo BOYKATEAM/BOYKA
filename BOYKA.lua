@@ -6832,7 +6832,7 @@ if not status_Link then
 send(msg.chat_id_, msg.id_,"⌯︙الرابط معطل") 
 return false  
 end
-local link = database:get(bot_id.."Link"..msg.chat_id_)            
+local link = database:get(bot_id.."Private:Group:Link"..msg.chat_id_)            
 if link then                              
 send(msg.chat_id_,msg.id_,'𝒍𝒊𝒏𝒌 𝒈𝒓𝒐𝒖𝒑  𖠐\n… … … … … … … … … … …\n ['..link..']')                          
 else                
@@ -9007,7 +9007,7 @@ Text = '⌯︙عدد نقاطك التي ربحتها هيه *» { '..Num..' } �
 end
 send(msg.chat_id_, msg.id_,Text) 
 end
-if text and text:match("^بيع نقاط (%d+)$") or text and text:match("^بيع نقاط (%d+)$") then
+if text and text:match("^بيع نقاطي (%d+)$") or text and text:match("^بيع نقاط (%d+)$") then
 local NUMPY = text:match("^بيع نقاطي (%d+)$") or text:match("^بيع نقاط (%d+)$") 
 if AddChannel(msg.sender_user_id_) == false then
 local textchuser = database:get(bot_id..'text:ch:user')
