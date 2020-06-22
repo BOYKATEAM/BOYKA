@@ -47,22 +47,10 @@ print('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم �
 end 
 os.execute('lua BOYKA.lua')
 end
-if not database:get(id_server..":SUDO:USERNAME") then
-io.write('\27[1;31m ↓ ارسل معرف المطور الاساسي :\n SEND ID FOR SIDO : \27[0;39;49m')
-local SUDOUSERNAME = io.read():gsub('@','')
-if SUDOUSERNAME ~= '' then
-io.write('\n\27[1;34m تم حفظ معرف المطور :\n\27[0;39;49m')
-database:set(id_server..":SUDO:USERNAME",'@'..SUDOUSERNAME)
-else
-print('\n\27[1;34m لم يتم حفظ معرف المطور :')
-end 
-os.execute('lua BOYKA.lua')
-end
 local create_config_auto = function()
 config = {
 token = database:get(id_server..":token"),
 SUDO = database:get(id_server..":SUDO:ID"),
-UserName = database:get(id_server..":SUDO:USERNAME"),
  }
 create(config, "./Info.lua")   
 end 
@@ -164,7 +152,7 @@ io.popen("cd File_Bot && rm -rf commands.lua.1")
 io.popen("cd File_Bot && rm -rf commands.lua.2") 
 io.popen("cd File_Bot && rm -rf commands.lua.3") 
 io.popen("cd File_Bot && wget https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/commands.lua") 
-t = "\27[35m".."\nAll Files Started : \n____________________\n"..'\27[m'
+t = "\27[35m".."\nAll Files Started : \nHello dear this thing does not belong to you to enter if your mother gives birth\n____________________\n"..'\27[m'
 i = 0
 for v in io.popen('ls File_Bot'):lines() do
 if v:match(".lua$") then
