@@ -6776,14 +6776,14 @@ end
 end
 if text == "تفعيل رابط" or text == 'تفعيل الرابط' then
 if Mod(msg) then  
-database:set(bot_id.."Link_Group:status"..msg.chat_id_,true) 
+database:set(bot_id.."Link_Group"..msg.chat_id_,true) 
 send(msg.chat_id_, msg.id_,"⌯︙تم تفعيل الرابط") 
 return false  
 end
 end
 if text == "تعطيل رابط" or text == 'تعطيل الرابط' then
 if Mod(msg) then  
-database:del(bot_id.."Link_Group:status"..msg.chat_id_) 
+database:del(bot_id.."Link_Group"..msg.chat_id_) 
 send(msg.chat_id_, msg.id_,"⌯︙تم تعطيل الرابط") 
 return false end
 end
@@ -6815,7 +6815,7 @@ send(msg.chat_id_, msg.id_,"⌯︙تم تعطيل الصوره")
 return false end
 end
 if text == "الرابط" then 
-local status_Link = database:get(bot_id.."Link_Group:status"..msg.chat_id_)
+local status_Link = database:get(bot_id.."Link_Grou"..msg.chat_id_)
 if not status_Link then
 send(msg.chat_id_, msg.id_,"⌯︙الرابط معطل") 
 return false  
@@ -7064,11 +7064,11 @@ send(msg.chat_id_, msg.id_,'⌯︙تم مسح قائمه منع الملصقات
 end
 ------------------
 
-if text == 'حذف كليشه المطور' or text == 'مسح كليشه المطور' and SudoBot(msg) then
+if text == 'مسح كليشه المطور' and SudoBot(msg) then
 database:del(bot_id..'TEXT_SUDO')
-send(msg.chat_id_, msg.id_,'⌯︙تم حذف كليشه المطور')
+send(msg.chat_id_, msg.id_,'⌯︙تم مسح كليشه المطور')
 end
-if text == 'وضع كليشه المطور' or text == 'ضع كليشه المطور' and SudoBot(msg) then
+if text == 'ضع كليشه المطور' and SudoBot(msg) then
 database:set(bot_id..'Set:TEXT_SUDO'..msg.chat_id_..':'..msg.sender_user_id_,true)
 send(msg.chat_id_,msg.id_,'⌯︙ارسل الكليشه الان')
 return false
