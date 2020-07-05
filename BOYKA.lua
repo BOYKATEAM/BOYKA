@@ -6,7 +6,7 @@ JSON  = dofile("./library/dkjson.lua")
 URL = require('socket.url')  
 utf8 = require ('lua-utf8') 
 database = redis.connect('127.0.0.1', 6379) 
-id_server = 2342443
+id_server = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a')
 --------------------------------------------------------------------------------------------------------------
 local AutoSet = function() 
 local create = function(data, file, uglify)  
@@ -1409,7 +1409,7 @@ t = '\n• نورت حبي \n•  name \n• user'
 end 
 t = t:gsub('name',result.first_name_) 
 t = t:gsub('user',('@'..result.username_ or 'لا يوجد')) 
-send(msg.chat_id_, msg.id_,t)
+send(msg.chat_id_, msg.id_,'['..t..']')
 end,nil) 
 end 
 end 
@@ -1468,7 +1468,7 @@ database:del(bot_id.."Set:Priovate:Group:Link"..msg.chat_id_..""..msg.sender_use
 return false
 end
 if text and text:match("(https://telegram.me/joinchat/%S+)") or text and text:match("(https://t.me/joinchat/%S+)") then     
-local Link = text:match("(https://telegram.me/joinchat/%S+)") or text:match("(https://t.me/joinchat/%S+)")   
+local Link = text:match("(https://telegram.me/joinchat/%S+)") or text and text:match("(https://t.me/joinchat/%S+)")   
 database:set(bot_id.."Private:Group:Link"..msg.chat_id_,Link)
 send(msg.chat_id_,msg.id_,"⌯︙تم حفظ الرابط بنجاح")
 database:del(bot_id.."Set:Priovate:Group:Link"..msg.chat_id_..""..msg.sender_user_id_) 
@@ -6836,6 +6836,7 @@ send(msg.chat_id_,msg.id_,'𝒍𝒊𝒏𝒌 𝒈𝒓𝒐𝒖𝒑  𖠐\n… … 
 else                
 local linkgpp = json:decode(https.request('https://api.telegram.org/bot'..token..'/exportChatInviteLink?chat_id='..msg.chat_id_))
 if linkgpp.ok == true then 
+database:set(bot_id.."Private:Group:Link"..msg.chat_id_,linkgpp.result)
 linkgp = '𝒍𝒊𝒏𝒌 𝒈𝒓𝒐𝒖𝒑  𖠐\n… … … … … … … … … … …\n ['..linkgpp.result..']'
 else
 linkgp = '⌯︙لا يوجد رابط ارسل ضع رابط'
@@ -7736,7 +7737,7 @@ send(msg.chat_id_, msg.id_,"⌯︙ارسل لي التوجيه الان")
 return false
 end 
 if text and text:match('^ضع اسم (.*)') and Manager(msg) or text and text:match('^وضع اسم (.*)') and Manager(msg) then 
-local Name = text:match('^ضع اسم (.*)') or text:match('^وضع اسم (.*)') 
+local Name = text:match('^ضع اسم (.*)') or text and text:match('^وضع اسم (.*)') 
 if AddChannel(msg.sender_user_id_) == false then
 local textchuser = database:get(bot_id..'text:ch:user')
 if textchuser then
@@ -8249,7 +8250,7 @@ if text == 'الاحصائيات' then
 if Sudo(msg) then 
 local Groups = database:scard(bot_id..'Chek:Groups')  
 local Users = database:scard(bot_id..'User_Bot')  
-Text = '⌯︙اسم البوت ← '..Namebot..'\n'..'⌯︙عدد المجموعات ← {'..Groups..'}'..'\n⌯︙عدد المشتركين ← {'..Users..'}'
+Text = '⌯︙اسم البوت ← '..(database:get(bot_id..'Name:Bot') or 'بويكا')..'\n'..'⌯︙عدد المجموعات ← {'..Groups..'}'..'\n⌯︙عدد المشتركين ← {'..Users..'}'
 send(msg.chat_id_, msg.id_,Text) 
 end
 return false
@@ -8903,7 +8904,7 @@ BOYKAk = ''
 else
 BOYKAk = '\n⌯︙تم ازالة » {'..w..'} مجموعه لان البوت عضو'
 end
-send(msg.chat_id_, msg.id_,'⌯︙عدد المجموعات الان » { '..#group..' }'..BOYKAk..''..BOYKA..'\n*⌯︙الان عدد المجموعات الحقيقي » { '..sendok..' } مجموعات\n')   
+send(msg.chat_id_, msg.id_,'⌯︙عدد المجموعات الان » { '..#group..' }'..BOYKAk..''..BOYKA..'\n⌯︙الان عدد المجموعات الحقيقي » { '..sendok..' } مجموعات\n')   
 end
 end
 end,nil)
@@ -8911,7 +8912,7 @@ end
 return false
 end
 
-if text:match("^(gpinfo)$") or text:match("^معلومات المجموعه$") then
+if text and text:match("^(gpinfo)$") or text and text:match("^معلومات المجموعه$") then
 function gpinfo(arg,data)
 -- vardump(data) 
 BOYKAdx(msg.chat_id_, msg.id_, '⌯︙ايدي المجموعة » ( '..msg.chat_id_..' )\n⌯︙عدد الادمنيه » ( *'..data.administrator_count_..' )*\n⌯︙عدد المحظورين » ( *'..data.kicked_count_..' )*\n⌯︙عدد الاعضاء » ( *'..data.member_count_..' )*\n', 'md') 
@@ -9006,7 +9007,7 @@ end
 send(msg.chat_id_, msg.id_,Text) 
 end
 if text and text:match("^بيع نقاطي (%d+)$") or text and text:match("^بيع نقاط (%d+)$") then
-local NUMPY = text:match("^بيع نقاطي (%d+)$") or text:match("^بيع نقاط (%d+)$") 
+local NUMPY = text:match("^بيع نقاطي (%d+)$") or text and text:match("^بيع نقاط (%d+)$") 
 if AddChannel(msg.sender_user_id_) == false then
 local textchuser = database:get(bot_id..'text:ch:user')
 if textchuser then
@@ -9056,7 +9057,7 @@ send(msg.chat_id_,msg.id_,'\n⌯︙اهلا عزيزي البوت هنا ادم�
 end
 end
 end
-if text:match("^كول (.*)$") then
+if text and text:match("^كول (.*)$") then
 local txt = {string.match(text, "^(كول) (.*)$")}
 send(msg.chat_id_, 0, txt[2], "md")
 local id = msg.id_
@@ -9307,7 +9308,7 @@ Text = [[
 send(msg.chat_id_, msg.id_,(help_text or Text)) 
 return false
 end
-if text:match('^الحساب (%d+)$') then
+if text and text:match('^الحساب (%d+)$') then
 local id = text:match('^الحساب (%d+)$')
 local text = 'اضغط لمشاهده العضو'
 tdcli_function ({ID="SendMessage", chat_id_=msg.chat_id_, reply_to_message_id_=msg.id_, disable_notification_=0, from_background_=1, reply_markup_=nil, input_message_content_={ID="InputMessageText", text_=text, disable_web_page_preview_=1, clear_draft_=0, entities_={[0] = {ID="MessageEntityMentionName", offset_=0, length_=19, user_id_=id}}}}, dl_cb, nil)
@@ -9333,7 +9334,7 @@ end
 end
 if text == "مصه" or text == "بوسه" then
 if not database:get(bot_id..'lock:add'..msg.chat_id_) then
-local texting = {"مووووووووواححح💋??","مابوس ولي😌😹","خدك/ج نضيف 😂","البوسه بالف حمبي 🌝💋","خلي يزحفلي وابوسه 🙊😻","كل شويه ابوسه كافي 😏","ماابوسه والله هذا زاحف🦎","محح هاي لحاته صاكه💋"}
+local texting = {"مووووووووواححح????","مابوس ولي😌😹","خدك/ج نضيف 😂","البوسه بالف حمبي 🌝💋","خلي يزحفلي وابوسه 🙊😻","كل شويه ابوسه كافي 😏","ماابوسه والله هذا زاحف🦎","محح هاي لحاته صاكه💋"}
 send(msg.chat_id_, msg.id_, ''..texting[math.random(#texting)]..'')
 end
 end
@@ -9363,6 +9364,12 @@ end -- Chat_Type = 'GroupBot'
 end -- end msg
 --------------------------------------------------------------------------------------------------------------
 function tdcli_update_callback(data)  -- clback
+if data.ID == ("UpdateChannel") then 
+if data.channel_.status_.ID == ("ChatMemberStatusKicked") then 
+redis:srem(bot_id..'Storm:ChekBotAdd','-100'..data.channel_.id_)  
+send(SUDO, 0,'📬| تم طردي من مجموعه \n💢| ايدي المجموعه : `'..'-100'..data.channel_.id_..'`')
+end
+end
 if data.ID == "UpdateNewMessage" then  -- new msg
 msg = data.message_
 text = msg.content_.text_
@@ -9538,59 +9545,6 @@ end
 if tonumber(data.id_) == tonumber(bot_id) then
 return false
 end
-local Get_Re_Name = database:get(bot_id.."Chen:Name"..msg.sender_user_id_) 
-if Get_Re_Name then 
-if Get_Re_Name ~= data.first_name_ then 
-amern = '['..(Get_Re_Name or '')..']'
-amerm = '['..data.first_name_..']'
-local amer ={ 
-'\n شكو غيرت اسمك  يا حلو 😹🌚',
-'\n شهل اسم الفيطي '..amerm.. ' \n رجعه ؏ قديم \n '..amern..'',
-'\n  ها ها شو غيرت اسمك 🤔😹',
-'\n شكو غيرت اسمك شنو قطيت وحده جديده 😹😹🌚',
-'\n شو غيرت اسمك شنو تعاركت ويه الحب ؟😹🌞',
-'\n ها ولك مو جان  اسمك   '..amern..'  شكو غيرته ',
-'\n شكو غيرت اسمك شسالفه ؟؟ 🤔🌞'
-}
-send(msg.chat_id_,msg.id_,amer[math.random(#amer)])
-database:set(bot_id.."Chen:Name"..msg.sender_user_id_, data.first_name_) 
-return false
-end  
-end
---------------------------------------------------------------------------------------------------------------
-local Getredis = database:get(bot_id.."Chen:User:Name"..msg.sender_user_id_)
-if data.username_ then  
-if Getredis and Getredis ~= data.username_ then 
-amern = '['..(database:get(bot_id.."Chen:User:Name"..msg.sender_user_id_) or '')..']'
-local amer ={ 
-'\n شكو غيرت معرفك  يا حلو 😹🌚',
-'\n  ها ها شو غيرت معرفك 🤔😹',
-'\n شكو غيرت معرفك شنو قطيت وحده جديده 😹😹🌚',
-'\n شو غيرت معرفك شنو تعاركت ويه الحب ؟😹🌞',
-'\n ها ولك مو جان  معرفك   '..amern..'  شكو غيرته ',
-'\n شكو غيرت معرفك شسالفه ؟؟ 🤔🌞'
-}
-send(msg.chat_id_,msg.id_,amer[math.random(#amer)])
-database:set(bot_id.."Chen:User:Name"..msg.sender_user_id_, data.username_) 
-return false
-end
-end
---------------------------------------------------------------------------------------------------------------
-local Getredis = database:get(bot_id.."Chen:Photo"..msg.sender_user_id_)
-if data.profile_photo_ then  
-if Getredis and Getredis ~= data.profile_photo_.id_ then 
-local amer ={ 
-'\n شكو غيرت صورتك  يا حلو 😹🌚',
-'\n  ها ها شو غيرت صورتك 🤔😹',
-'\n شكو غيرت صورتك شنو قطيت وحده جديده 😹😹🌚',
-'\n شو غيرت صورتك شنو تعاركت ويه الحب ؟😹🌞',
-'\n شكو غيرت صورتك شسالفه ؟؟ 🤔🌞'
-}
-send(msg.chat_id_,msg.id_,amer[math.random(#ame)])
-database:set(bot_id.."Chen:Photo"..msg.sender_user_id_, data.profile_photo_.id_) 
-return false
-end
-end
 end,nil)   
 end
 elseif (data.ID == "UpdateMessageEdited") then
@@ -9604,7 +9558,7 @@ local username = data.username_
 local name = data.first_name_
 local iduser = data.id_
 local users = ('[@'..data.username_..']' or iduser)
-local list = database:smembers(bot_id..'Mod:User'..msg.chat_id_)
+local list = database:smembers(bot_id..'Constructor'..msg.chat_id_)
 t = "\n⌯︙شخص ما يحاول تعديل الميديا \n"
 for k,v in pairs(list) do
 local username = database:get(bot_id.."user:Name" .. v)
@@ -9617,70 +9571,70 @@ end
 if #list == 0 then
 t = "⌯︙لا يوجد ادمن"
 end
-send(msg.chat_id_,0,''..t..'\n… … … … … … … … … … …\n⌯︙تم التعديل على الميديا\n⌯︙الشخص الي قام بالتعديل\n⌯︙ايدي الشخص ← `'..result.sender_user_id_..'`\n⌯︙معرف الشخص←{ '..users..' }') 
+send(msg.chat_id_,0,''..t..'\n… … … … … … … … … … …\n⌯︙تم التعديل على الميديا\n⌯︙الشخص الي قام بالتعديل\n⌯︙ايدي الشخص ← '..result.sender_user_id_..'\n⌯︙معرف الشخص←{ '..users..' }') 
 end,nil)
 DeleteMessage(msg.chat_id_,{[0] = msg.message_id_}) 
 end
 local text = result.content_.text_
 if not Mod(result) then
 ------------------------------------------------------------------------
-if text:match("[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]") or text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
+if text and text:match("[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]") or text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end 
 end
 ------------------------------------------------------------------------
-if text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
+if text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end 
 end
 ------------------------------------------------------------------------
-if text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
+if text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end
 ------------------------------------------------------------------------
-if text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
+if text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end 
 ------------------------------------------------------------------------
-if text:match("[hH][tT][tT][pP][sT]") or text:match("[tT][eE][lL][eE][gG][rR][aA].[Pp][Hh]") or text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa].[Pp][Hh]") then
+if text and text:match("[hH][tT][tT][pP][sT]") or text and text:match("[tT][eE][lL][eE][gG][rR][aA].[Pp][Hh]") or text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa].[Pp][Hh]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end 
 ------------------------------------------------------------------------
-if text:match("(.*)(@)(.*)") then
+if text and text:match("(.*)(@)(.*)") then
 if database:get(bot_id.."lock:user:name"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end
 ------------------------------------------------------------------------
-if text:match("@") then
+if text and text:match("@") then
 if database:get(bot_id.."lock:user:name"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end 
 ------------------------------------------------------------------------
-if text:match("(.*)(#)(.*)") then
+if text and text:match("(.*)(#)(.*)") then
 if database:get(bot_id.."lock:hashtak"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end  
 end 
 ------------------------------------------------------------------------
-if text:match("#") then
+if text and text:match("#") then
 if database:get(bot_id.."lock:user:name"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
@@ -9700,13 +9654,13 @@ DeleteMessage(msg.chat_id_,{[0] = data.message_id_})
 return false
 end
 ------------------------------------------------------------------------
-if text:match("/") then
+if text and text:match("/") then
 if database:get(bot_id.."lock:Cmd"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
 end 
 end 
-if text:match("(.*)(/)(.*)") then
+if text and text:match("(.*)(/)(.*)") then
 if database:get(bot_id.."lock:Cmd"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
