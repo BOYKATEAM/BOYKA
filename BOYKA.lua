@@ -259,12 +259,13 @@ var = false
 end  
 return var
 end 
-
 function Rutba(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = 'مطور السورس'
 elseif tonumber(user_id) == tonumber(1216110209) then
 var = 'مبرمج بويكا'
+elseif tonumber(user_id) == tonumber(SUDO) then
+var = 'المطور الاساسي'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
 var = 'البوت'
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
@@ -4192,7 +4193,7 @@ if text == 'مسح الادمنيه' and Manager(msg) then
 database:del(bot_id..'Mod:User'..msg.chat_id_)
 send(msg.chat_id_, msg.id_, ' ✸∫ تم مسح الادمنيه')
 end
-if text == ("الادمنيه") then
+if text == ("الادمنيه") and Manager(msg) then
 local list = database:smembers(bot_id..'Mod:User'..msg.chat_id_)
 t = "\n ✸∫ قائمة الادمنيه \n≪━━━━━━━━━━━━━≫\n"
 for k,v in pairs(list) do
