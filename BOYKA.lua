@@ -1178,13 +1178,15 @@ BOYKAk = ''
 else
 BOYKAk = '\n✸∫ تم ازالة » {'..w..'} كروب لان البوت عضو'
 end
-send(msg.chat_id_, msg.id_,'✸∫  عدد الكروبات الان » { '..#group..' }'..BOYKAk..''..BOYKA..'\n*✸∫  الان عدد الكروبات الحقيقي » { '..sendok..' } كروبات\n')   
+send(msg.chat_id_, msg.id_,'✸∫  عدد الكروبات الان » { '..#group..' }'..BOYKAk..''..BOYKA..'\n✸∫  الان عدد الكروبات الحقيقي » { '..sendok..' } كروبات\n')   
 end
 end
 end,nil)
 end
 return false
 end
+
+
 if text and text:match("^رفع مطور @(.*)$") and SudoBot(msg) then
 local username = text:match("^رفع مطور @(.*)$")
 if AddChannel(msg.sender_user_id_) == false then
