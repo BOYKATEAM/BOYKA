@@ -173,7 +173,7 @@ print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
-sudo_users = {SUDO,1264922434,1216110209}   
+sudo_users = {SUDO,1264922434,}   
 function SudoBot(msg)  
 local BOYKA = false  
 for k,v in pairs(sudo_users) do  
@@ -234,8 +234,6 @@ end
 function Can_or_NotCan(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = true  
-elseif tonumber(user_id) == tonumber(1216110209) then
-var = true  
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
@@ -262,8 +260,6 @@ end
 function Rutba(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = 'مطور السورس'
-elseif tonumber(user_id) == tonumber(1216110209) then
-var = 'مبرمج بويكا'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
@@ -7823,8 +7819,8 @@ send(msg.chat_id_, msg.id_,' ✸∫ لا تستطيع استخدام البوت 
 end
 return false
 end
-if num > 1000 then 
-send(msg.chat_id_, msg.id_,' ✸∫ تستطيع التنظيف ل1000 رساله كحد اقصى') 
+if num > 100 then 
+send(msg.chat_id_, msg.id_,' ✸∫ تستطيع التنظيف ل100 رساله كحد اقصى')
 return false  
 end  
 local msgm = msg.id_
