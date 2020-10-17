@@ -9651,13 +9651,13 @@ if text and text:match("^زخرفه (.*)$") and database:get(bot_id.." AMER:zhrf
 local TextZhrfa = text:match("^زخرفه (.*)$")
 zh = https.request('https://forhassan.ml/Black/hso.php?en='..URL.escape(TextZhrfa)..'')
 zx = JSON.decode(zh)
-t = "\n❃∫قائمه الزخرفه \nٴ❃∫○━━━𝓝𝓰━━━❃∫○ٴ \n"
+t = "\n❃∫قائمه الزخرفه \nٴ❃∫≪━━━━━━━━━━━━━≫❃∫○ٴ \n"
 i = 0
 for k,v in pairs(zx.ok) do
 i = i + 1
 t = t..i.."-  "..v.." \n"
 end
-send(msg.chat_id_, msg.id_, t..'ٴ❃∫○━━━𝓝𝓰━━━❃∫○ٴ\n❃∫اضغط على الاسم ليتم نسخه')
+send(msg.chat_id_, msg.id_, t..'ٴ❃∫≪━━━━━━━━━━━━━≫❃∫○ٴ\n❃∫اضغط على الاسم ليتم نسخه')
 end
 if text == "تعطيل الابراج" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل الابراج')
