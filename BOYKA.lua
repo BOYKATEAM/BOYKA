@@ -8769,12 +8769,12 @@ return false
 end 
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,ta) 
 tdcli_function({ID="GetChannelFull",channel_id_ = msg.chat_id_:gsub('-100','')},function(arg,data) 
-local amer = ' ❃∫ عدد الادمنيه : '..data.administrator_count_..
+local amir = ' ❃∫ عدد الادمنيه : '..data.administrator_count_..
 '\n\n ❃∫ عدد المطرودين : '..data.kicked_count_..
 '\n\n ❃∫ عدد الاعضاء : '..data.member_count_..
 '\n\n ❃∫ عدد رسائل الكروب : '..(msg.id_/2097152/0.5)..
 '\n\n ❃∫  اسم الكروب : ['..ta.title_..']'
-send(msg.chat_id_, msg.id_, amer) 
+send(msg.chat_id_, msg.id_, amir) 
 end,nil)
 end,nil)
 end 
@@ -9023,7 +9023,7 @@ return false
 end
 if not database:sismember(bot_id..'Spam:Texting'..msg.sender_user_id_,text) then
 database:sadd(bot_id..'Spam:Texting'..msg.sender_user_id_,text) 
-tdcli_function ({ID = "GetChatMember",chat_id_ = msg.chat_id_,user_id_ = msg.sender_user_id_},function(arg,da)  tdcli_function ({ ID = "SendChatAction",  chat_id_ = msg.sender_user_id_, action_ = {  ID = "SendMessageTypingAction", progress_ = 100}  },function(arg,ta)  tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)  tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.sender_user_id_,offset_ = 0,limit_ = 1},function(extra,amer,success) 
+tdcli_function ({ID = "GetChatMember",chat_id_ = msg.chat_id_,user_id_ = msg.sender_user_id_},function(arg,da)  tdcli_function ({ ID = "SendChatAction",  chat_id_ = msg.sender_user_id_, action_ = {  ID = "SendMessageTypingAction", progress_ = 100}  },function(arg,ta)  tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)  tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = msg.sender_user_id_,offset_ = 0,limit_ = 1},function(extra,amir,success) 
 if da.status_.ID == "ChatMemberStatusCreator" then 
 rtpa = 'المالك'
 elseif da.status_.ID == "ChatMemberStatusEditor" then 
@@ -9044,10 +9044,10 @@ username = 'لا يوجد '
 end
 local iduser = msg.sender_user_id_
 local edit = tonumber(database:get(bot_id..'edits'..msg.chat_id_..msg.sender_user_id_) or 0)
-local photps = (amer.total_count_ or 0)
+local photps = (amir.total_count_ or 0)
 local interaction = Total_Msg(Msguser)
 local rtpg = rtpa
-local amera = {
+local amira = {
 " ❃∫ اروح فـدوه للـحلوين",
 " ❃∫ فديت الصاك محح",
 " ❃∫ فـدشـي عمـي",
@@ -9057,7 +9057,7 @@ local amera = {
 " ❃∫ فديت الحلو ",
 " ❃∫ بـبكن حـلك ",
 }
-local rdphoto = amera[math.random(#amera)]
+local rdphoto = amira[math.random(#amira)]
 if not database:get(bot_id..'Bot:Id:Photo'..msg.chat_id_) then      
 local get_id_text = database:get(bot_id.."KLISH:ID"..msg.chat_id_)
 if get_id_text then
@@ -9076,7 +9076,7 @@ get_id_text = get_id_text:gsub('#auto',interaction)
 get_id_text = get_id_text:gsub('#game',NUMPGAME) 
 get_id_text = get_id_text:gsub('#photos',photps) 
 if result.status_.ID == "UserStatusRecently" and result.profile_photo_ ~= false then   
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amer.photos_[0].sizes_[1].photo_.persistent_id_,get_id_text)       
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amir.photos_[0].sizes_[1].photo_.persistent_id_,get_id_text)       
 else 
 if result.status_.ID == "UserStatusEmpty" and result.profile_photo_ == false then
 send(msg.chat_id_, msg.id_,'['..get_id_text..']')   
@@ -9091,7 +9091,7 @@ else
 username = 'لا يوجد '
 end
 if result.status_.ID == "UserStatusRecently" and result.profile_photo_ ~= false then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amer.photos_[0].sizes_[1].photo_.persistent_id_,''..rdphoto..'\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..'\n')
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amir.photos_[0].sizes_[1].photo_.persistent_id_,''..rdphoto..'\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..'\n')
 else 
 if result.status_.ID == "UserStatusEmpty" and result.profile_photo_ == false then
 send(msg.chat_id_, msg.id_,'[\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه  تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..']\n')
@@ -9294,16 +9294,16 @@ send(msg.chat_id_, msg.id_,  1, "??| تم اضافة له {"..numadded..'} من 
 end
 ------------------------------------------------------------
 if text and text:match("^اضف رسائل (%d+)$") and msg.reply_to_message_id_ == 0 and Constructor(msg) then    
-amer = text:match("^اضف رسائل (%d+)$")
-database:set(bot_id..'id:user'..msg.chat_id_,amer)  
+amir = text:match("^اضف رسائل (%d+)$")
+database:set(bot_id..'id:user'..msg.chat_id_,amir)  
 database:setex(bot_id.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 120, true)  
 send(msg.chat_id_, msg.id_, ' ❃∫ ارسل لي عدد الرسائل الان') 
 return false
 end
 ------------------------------------------------------------------------
 if text and text:match("^اضف نقاط (%d+)$") and msg.reply_to_message_id_ == 0 and Constructor(msg) then  
-amer = text:match("^اضف نقاط (%d+)$")
-database:set(bot_id..'idgem:user'..msg.chat_id_,amer)  
+amir = text:match("^اضف نقاط (%d+)$")
+database:set(bot_id..'idgem:user'..msg.chat_id_,amir)  
 database:setex(bot_id.."gemadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 120, true)  
 send(msg.chat_id_, msg.id_, ' ❃∫ ارسل لي عدد النقاط التي تريد اضافتها') 
 return false
@@ -9641,35 +9641,35 @@ return false
 end
 if text == "تعطيل الزخرفه" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل الزخرفه')
-database:set(bot_id.." AMER:zhrf_Bots"..msg.chat_id_,"close")
+database:set(bot_id.." amir:zhrf_Bots"..msg.chat_id_,"close")
 end
 if text == "تفعيل الزخرفه" and Manager(msg) then
 send(msg.chat_id_, msg.id_,'❃∫ تم تفعيل الزخرفه')
-database:set(bot_id.." AMER:zhrf_Bots"..msg.chat_id_,"open")
+database:set(bot_id.." amir:zhrf_Bots"..msg.chat_id_,"open")
 end
-if text and text:match("^زخرفه (.*)$") and database:get(bot_id.." AMER:zhrf_Bots"..msg.chat_id_) == "open" then
+if text and text:match("^زخرفه (.*)$") and database:get(bot_id.." amir:zhrf_Bots"..msg.chat_id_) == "open" then
 local TextZhrfa = text:match("^زخرفه (.*)$")
-zh = https.request('https://forhassan.ml/Black/hso.php?en='..URL.escape(TextZhrfa)..'')
+zh = https.request('https://rudi-dev.tk/Amir1/Boyka.php?en='..URL.escape(TextZhrfa)..'')
 zx = JSON.decode(zh)
-t = "\n❃∫قائمه الزخرفه \nٴ❃∫━━━━━━𝘽𝙆━━━━━━❃∫○ٴ \n"
+t = "\n❃∫ قائمه الزخرفه \nٴ❃∫━━━━━━𝘽𝙆━━━━━━❃∫○ٴ \n"
 i = 0
 for k,v in pairs(zx.ok) do
 i = i + 1
 t = t..i.."-  "..v.." \n"
 end
-send(msg.chat_id_, msg.id_, t..'ٴ❃∫━━━━━━𝘽𝙆━━━━━━❃∫○ٴ\n❃∫اضغط على الاسم ليتم نسخه')
+send(msg.chat_id_, msg.id_, t..'ٴ❃∫━━━━━━𝘽𝙆━━━━━━❃∫○ٴ\n❃∫ 彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/pvv_v)➢ ')
 end
 if text == "تعطيل الابراج" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل الابراج')
-database:set(bot_id.." AMER:brj_Bots"..msg.chat_id_,"close")
+database:set(bot_id.." amir:brj_Bots"..msg.chat_id_,"close")
 end
 if text == "تفعيل الابراج" and Manager(msg) then
 send(msg.chat_id_, msg.id_,'❃∫ تم تفعيل الابراج')
-database:set(bot_id.." AMER:brj_Bots"..msg.chat_id_,"open")
+database:set(bot_id.." amir:brj_Bots"..msg.chat_id_,"open")
 end
-if text and text:match("^برج (.*)$") and database:get(bot_id.." AMER:brj_Bots"..msg.chat_id_) == "open" then
+if text and text:match("^برج (.*)$") and database:get(bot_id.." amir:brj_Bots"..msg.chat_id_) == "open" then
 local Textbrj = text:match("^برج (.*)$")
-gk = https.request('https://mode-dev.tk/Api2/Modbr.php?br='..URL.escape(Textbrj)..'')
+gk = https.request('https://rudi-dev.tk/Amir2/Boyka.php?br='..URL.escape(Textbrj)..'')
 br = JSON.decode(gk)
 i = 0
 for k,v in pairs(br.ok) do
@@ -9680,19 +9680,19 @@ send(msg.chat_id_, msg.id_, t)
 end
 if text == "تعطيل حساب العمر" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل حساب العمر')
-database:set(bot_id.." AMER:age_Bots"..msg.chat_id_,"close")
+database:set(bot_id.." amir:age_Bots"..msg.chat_id_,"close")
 end
 if text == "تعطيل حساب العمر" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل حساب العمر')
-database:set(bot_id.." AMER:age_Bots"..msg.chat_id_,"close")
+database:set(bot_id.." amir:age_Bots"..msg.chat_id_,"close")
 end
 if text == "تفعيل حساب العمر" and Manager(msg) then
 send(msg.chat_id_, msg.id_,'❃∫ تم تفعيل حساب العمر')
-database:set(bot_id.." AMER:age_Bots"..msg.chat_id_,"open")
+database:set(bot_id.." amir:age_Bots"..msg.chat_id_,"open")
 end
-if text and text:match("^احسب (.*)$") and database:get(bot_id.." AMER:age_Bots"..msg.chat_id_) == "open" then
+if text and text:match("^احسب (.*)$") and database:get(bot_id.." amir:age_Bots"..msg.chat_id_) == "open" then
 local Textage = text:match("^احسب (.*)$")
-ge = https.request('https://mode-dev.tk/Api1/niggaapi.php?age='..URL.escape(Textage)..'')
+ge = https.request('https://rudi-dev.tk/Amir3/Boyka.php?age='..URL.escape(Textage)..'')
 ag = JSON.decode(ge)
 i = 0
 for k,v in pairs(ag.ok) do
