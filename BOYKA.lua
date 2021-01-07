@@ -185,11 +185,11 @@ return BOYKA
 end 
 function Bot(msg)  
 local idbot = false  
-if msg.sender_user_id_ == bot_id then  
-idbot = true  
+if tonumber(msg.sender_user_id_) == tonumber(bot_id) then  
+idbot = true    
 end  
 return idbot  
-end 
+end
 function Sudo(msg) 
 local hash = database:sismember(bot_id..'Sudo:User', msg.sender_user_id_) 
 if hash or SudoBot(msg) or Bot(msg)  then  
