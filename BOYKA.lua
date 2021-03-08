@@ -921,7 +921,7 @@ send(msg.sender_user_id_, msg.id_,' ❃∫ تم ارسال رسالتك\n ❃∫
 tdcli_function ({ID = "ForwardMessages", chat_id_ = SUDO,    from_chat_id_ = msg.sender_user_id_,    message_ids_ = {[0] = msg.id_},    disable_notification_ = 1,    from_background_ = 1 },function(arg,data) 
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,ta) 
 vardump(data)
-if data and data.messages_[0].content_.sticker_ then
+if data and data.messages_.content_.sticker_ then
 local Name = '['..string.sub(ta.first_name_,0, 40)..'](tg://user?id='..ta.id_..')'
 local Text = ' ❃∫ تم ارسال الملصق من ↓\n - '..Name
 sendText(SUDO,Text,0,'md')
