@@ -49,7 +49,7 @@ os.execute('lua BOYKA.lua')
 end ---ifBn
 if muaed.Info.info == 'Ok' then
 io.write('\n\27[1;31m تم حفظ الايدي\n\27[0;39;49m')
-database:set(Server_Done.."UserSudo_Write",Id)
+database:set(id_server..":SUDO:ID",SUDOID)
 end ---ifok
 else
 io.write('\n\27[1;31mالايدي مينحفظ\n\27[0;39;49m')
