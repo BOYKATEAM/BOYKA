@@ -21,7 +21,7 @@ sudo apt-get install libnotify-dev -y
 sudo chmod +x tg
 lua BOYKA.lua
 sudo chmod +x BOYKA
-sudo chmod +x ./BS
+sudo chmod +x ./BK
 ./BS
 }
 if [ "$1" = "install" ]; then
@@ -34,6 +34,6 @@ fi
 sudo chmod +x tg
 lua BOYKA.lua
 sudo chmod +x BOYKA
-sudo chmod +x ./BS
-./BS
+sudo chmod +x ./BK
+./BK
 fi
