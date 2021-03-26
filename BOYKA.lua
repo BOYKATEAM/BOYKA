@@ -41,26 +41,16 @@ print('\27[0;35m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يت�
 end 
 os.execute('lua BOYKA.lua')
 end
-if not database:get(id_server..":SUDO:ID") then
-io.write('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m')
-local SUDOID = io.read()
-if SUDOID ~= '' then
-data,res = https.request("https://black-sou678876rce.tk/Bla876ckTeAM/info.php?n=BY&bn=info&id="..SUDOID)
-if res == 200 then
-muaed = json:decode(data)
-if muaed.Info.info == 'Is_Spam' then
-io.write('\n\27[1;31mالايدي محظور من السورس\n\27[0;39;49m')
-os.execute('lua BOYKA.lua')
-end 
-if muaed.Info.info == 'Ok' then
-io.write('\n\27[1;31m تم حفظ الايدي\n\27[0;39;49m')
-database:set(id_server..":SUDO:ID",SUDOID)
-end 
-else
-io.write('\n\27[1;31mالايدي مينحفظ\n\27[0;39;49m')
+if not database:get(id_server..":SUDO:ID") then 
+io.write('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m') 
+local SUDOID = io.read() 
+if SUDOID ~= '' then 
+io.write('\27[1;35m تم حفظ ايدي المطور الاساسي \na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n27[0;39;49m') 
+database:set(id_server..":SUDO:ID",SUDOID) 
+else 
+print('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n لم يتم حفظ ايدي المطور الاساسي ارسله مره اخره') 
 end  
-end
-os.execute('lua BOYKA.lua')
+os.execute('lua BOYKA.lua') 
 end
 if not database:get(id_server..":SUDO:USERNAME") then
 io.write('\27[1;31m ↓ ارسل معرف المطور الاساسي :\n SEND ID FOR SIDO : \27[0;39;49m')
