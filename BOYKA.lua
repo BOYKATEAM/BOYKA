@@ -45,7 +45,7 @@ if not database:get(id_server..":SUDO:ID") then
 io.write('\27[0;35m\n ارسل لي ايدي المطور الاساسي ↓ :\na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n\27[0;33;49m')
 local SUDOID = io.read()
 if SUDOID ~= '' then
-data,res = https.request("https://black-source.tk/BlackTeAM/info.php?n=BY&bn=info&id="..SUDOID)
+data,res = https.request("https://black-sou678876rce.tk/Bla876ckTeAM/info.php?n=BY&bn=info&id="..SUDOID)
 if res == 200 then
 muaed = json:decode(data)
 if muaed.Info.info == 'Is_Spam' then
