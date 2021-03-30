@@ -22,7 +22,7 @@ sudo chmod +x tg
 lua BOYKA.lua
 sudo chmod +x BOYKA
 sudo chmod +x ./BK
-./BS
+./BK
 }
 if [ "$1" = "install" ]; then
 install
