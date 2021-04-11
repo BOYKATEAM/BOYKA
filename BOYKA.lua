@@ -34,6 +34,8 @@ if res ~= 200 then
 print('\27[0;31m┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n التوكن غير صحيح تاكد منه ثم ارسله')
 else
 io.write('\27[0;31m تم حفظ التوكن بنجاح \na┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉ ┉\n27[0;39;49m')
+local json = JSON.decode(url)
+database:set(id_server..":token_username","@"..json.result.username)
 database:set(id_server..":token",token)
 end 
 else
@@ -11035,9 +11037,10 @@ end,nil)
 
 elseif (data.ID == "UpdateOption" and data.name_ == "my_id") then 
 infos = {} 
-infos.sudoid = database:get(id_server..":SUDO:ID")
+infos.sudoid = SUDO
 infos.sudouser  = database:get(id_server..":SUDO:USERNAME")
-infos.token  = database:get(id_server..":token")
+infos.userbot = database:get(id_server..":token_username")
+infos.token  = token
 infos.id_server = id_server
 infos.name = Name
 infos.port = Port
