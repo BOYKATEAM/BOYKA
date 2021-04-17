@@ -186,7 +186,6 @@ end
 end  
 return BOYKA  
 end 
-
 function vardump(value)  
 print(serpent.block(value, {comment=false}))   
 end 
