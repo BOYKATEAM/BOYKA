@@ -186,9 +186,6 @@ end
 end  
 return BOYKA  
 end 
-function vardump(value)  
-print(serpent.block(value, {comment=false}))   
-end 
 sudo_users = {SUDO,782717203}   
 function SudoBot(msg)  
 local BOYKA = false  
