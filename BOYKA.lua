@@ -1119,7 +1119,7 @@ end
 if text == 'تحديث السورس ❃' and DevBOYKAW(msg) then 
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
-send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 6.0v}')
+send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 6.7v}')
 dofile('BOYKA.lua')  
 end
 if text == 'تحديث المتجر ❃' and DevBOYKAW(msg) then 
@@ -2388,7 +2388,7 @@ return false
 end
 os.execute('rm -rf BOYKA.lua')
 os.execute('wget https://raw.githubusercontent.com/BOYKATEAM/BOYKA/master/BOYKA.lua')
-send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 1.3v}')
+send(msg.chat_id_, msg.id_,' ❃∫ تم تحديث السورس \n ❃∫ لديك اخر اصدار لسورس بويكا\n ❃∫ الاصدار » { 6.7v}')
 dofile('BOYKA.lua')  
 end
 
